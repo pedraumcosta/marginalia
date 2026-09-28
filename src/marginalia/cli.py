@@ -11,6 +11,7 @@ import sys
 
 from . import __version__
 from .config import Config, ConfigError
+from .documents import chunk_of, discover
 from .scope import ScopeError
 
 
@@ -57,6 +58,21 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_scope.set_defaults(func=cmd_scope)
 
+    p_chunks = sub.add_parser(
+        "chunks",
+        help="chunk the corpus and report what came out, without building an index",
+        description=(
+            "Chunk every document in scope and summarise the result: counts, size "
+            "distribution, how many carry a section reference, and sample citations. "
+            "Reads file contents but writes nothing."
+        ),
+    )
+    _add_common(p_chunks)
+    p_chunks.add_argument("--sample", type=int, default=5, metavar="N", help="sample N citations")
+    p_chunks.add_argument("--doc", metavar="REL", help="only this document (relative path)")
+    p_chunks.add_argument("--max-chars", type=int, metavar="N", help="override chunk size")
+    p_chunks.set_defaults(func=cmd_chunks)
+
     return parser
 
 
@@ -82,6 +98,56 @@ def cmd_scope(args: argparse.Namespace) -> int:
         if args.files:
             for f in sorted(policy.iter_files()):
                 print(f"    {f}")
+    return 0
+
+
+def cmd_chunks(args: argparse.Namespace) -> int:
+    cfg = Config.load(args.config)
+    profile = args.profile or cfg.default_profile
+    policy = cfg.scope(profile)
+    trust = cfg.trust_policy(profile)
+
+    docs = list(discover(policy, trust))
+    if args.doc:
+        docs = [d for d in docs if d.rel == args.doc or d.rel.endswith(args.doc)]
+        if not docs:
+            print(
+                f"error: no document matching {args.doc!r} in profile {profile!r}", file=sys.stderr
+            )
+            return 1
+
+    chunks = []
+    for doc in docs:
+        chunks.extend(chunk_of(doc, max_chars=args.max_chars))
+
+    if not chunks:
+        print(f"profile {profile!r}: {len(docs)} document(s), no chunks produced")
+        return 0
+
+    sizes = sorted(len(c.text) for c in chunks)
+    n = len(sizes)
+    with_ref = sum(1 for c in chunks if c.section_ref)
+    split = sum(1 for c in chunks if c.is_split)
+    parented = sum(1 for c in chunks if c.parent_chunk_id)
+
+    print(f"profile: {profile}")
+    print(f"  {len(docs):>6}  documents")
+    print(f"  {n:>6}  chunks")
+    print(f"  {'':>6}  chars: min {sizes[0]}, median {sizes[n // 2]}, max {sizes[-1]}")
+    print(f"  {with_ref:>6}  carry a section reference ({with_ref * 100 // n}%)")
+    print(f"  {split:>6}  are part of a split section")
+    print(f"  {parented:>6}  have a parent section for context")
+
+    tiers: dict[str, int] = {}
+    for c in chunks:
+        tiers[c.trust] = tiers.get(c.trust, 0) + 1
+    print("  trust: " + ", ".join(f"{k}={v}" for k, v in sorted(tiers.items())))
+
+    if args.sample:
+        print(f"\n  sample citations ({min(args.sample, n)} of {n}):")
+        step = max(1, n // args.sample)
+        for c in chunks[::step][: args.sample]:
+            print(f"    {c.citation}")
     return 0
 
 

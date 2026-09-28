@@ -19,6 +19,7 @@ from typing import Any
 
 import yaml
 
+from .documents import TrustPolicy
 from .scope import ScopePolicy
 
 DEFAULT_CONFIG_NAMES = ("config.local.yaml", "config.local.yml", "config.yaml", "config.yml")
@@ -172,6 +173,24 @@ class Config:
     def index_dir(self, profile: str | None = None) -> Path:
         """Per-profile index directory, so profiles cannot return each other's results."""
         return self.index_root / (profile or self.default_profile)
+
+    # ---- trust ----------------------------------------------------------------
+
+    def trust_policy(self, profile: str | None = None) -> TrustPolicy:
+        """Trust rules for a profile, falling back to a top-level `trust` block.
+
+        A profile may override the whole block, which is the point: the authored corpus
+        and the wider library have different provenance by definition.
+        """
+        name = profile or self.default_profile
+        section = self._scope_section
+        profiles = section.get("profiles")
+        if isinstance(profiles, Mapping) and name in profiles:
+            entry = profiles[name]
+            if isinstance(entry, Mapping) and isinstance(entry.get("trust"), Mapping):
+                return TrustPolicy.from_config(entry["trust"])
+        top = self.data.get("trust")
+        return TrustPolicy.from_config(top if isinstance(top, Mapping) else None)
 
     # ---- generation ----------------------------------------------------------
 

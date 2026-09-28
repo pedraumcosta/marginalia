@@ -46,3 +46,17 @@ generation:
   # "local" uses a local model. "anthropic" sends retrieved chunks off-machine and
   # must be enabled deliberately, in this file, never in the committed example.
   provider: none
+
+# Provenance, recorded at ingestion rather than guessed at query time. A corpus mixing
+# your own writing with collected third-party text mixes text you wrote with text someone
+# else could have written, and persistent retrieval turns a one-shot injection into a
+# durable one. Tiers, most to least trusted: authored, curated, upstream, untrusted,
+# unknown. The default is `unknown`, because over-trusting by default is the failure mode
+# that matters. Rules match the path relative to the scope root and the first match wins.
+trust:
+  default: authored
+  rules:
+    - match: clippings        # saved articles: someone else's words
+      trust: untrusted
+    - match: vendor/*
+      trust: upstream

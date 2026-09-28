@@ -3,7 +3,7 @@
 Retrieval over a Markdown knowledge wiki — local embeddings, citations in the wiki's own
 `file §section` idiom, and an evaluation harness that reports numbers rather than claims.
 
-> **Status: in development.** Scoping and safety rails are in place; ingestion, indexing,
+> **Status: in development.** Scoping, safety rails and ingestion are in place; indexing,
 > retrieval and evaluation are not yet built. See [`docs/adr/`](docs/adr/) for the decisions
 > already made and, as importantly, what was rejected.
 
@@ -61,6 +61,45 @@ Any subdirectory that is itself a git repository is skipped: a cloned dependency
 sample code is not your writing. This is a rule rather than an exclusion list because the corpus
 it was developed against contains 182 of them, and a list would be stale within a week. Carve
 out individual ones with `allow_repos` when a clone genuinely belongs in the corpus.
+
+## Chunking
+
+Chunks follow the document's own heading structure rather than a fixed byte size, so a result
+cites itself the way the corpus does:
+
+```console
+$ marginalia chunks
+profile: authored
+      35  documents
+     958  chunks
+          chars: min 40, median 884, max 1799
+     315  carry a section reference (32%)
+     410  are part of a split section
+     775  have a parent section for context
+  trust: authored=958
+
+  sample citations (6 of 958):
+    Mngmnt.md §1
+    NLP/Courses.md > Agent (1/3)
+    Effective_Engineer.md > Adopt the Right Mindsets > Invest in your team's Growth
+```
+
+A section reference is recovered from the heading text, so `## 6.5 Agent Memory` cites as
+`LLM.md §6.5`. Where headings are not numbered the heading path is used instead. Oversized
+sections are split *within* the section and never across a heading boundary, and a document
+with no headings at all falls back to fixed-size windows.
+
+Each chunk records the nearest ancestor section, so retrieval can match a small chunk and
+expand to its parent for answer context.
+
+### Provenance
+
+Every document carries a trust tier — `authored`, `curated`, `upstream`, `untrusted` or
+`unknown` — assigned at ingestion from configuration, not guessed at query time. A corpus
+mixing your own writing with collected third-party text mixes text you wrote with text
+somebody else could have written, and persistent retrieval turns a one-shot prompt injection
+into a durable one. The default tier is `unknown`, because over-trusting by default is the
+failure mode that matters.
 
 ## Development
 
