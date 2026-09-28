@@ -3,9 +3,8 @@
 Retrieval over a Markdown knowledge wiki — local embeddings, citations in the wiki's own
 `file §section` idiom, and an evaluation harness that reports numbers rather than claims.
 
-> **Status: in development.** Scoping, safety rails, ingestion, indexing, hybrid retrieval
-> and evaluation all work. Numbers below are measured and reproducible; the generation
-> layer is not built yet. See [`docs/adr/`](docs/adr/) for the decisions
+> **Status: in development.** Scoping, safety rails, ingestion, indexing, hybrid retrieval,
+> evaluation and answering all work. Numbers below are measured and reproducible. See [`docs/adr/`](docs/adr/) for the decisions
 > already made and, as importantly, what was rejected.
 
 ## Why this exists
@@ -136,6 +135,51 @@ measured. RRF reads only rank positions.
 
 Retrieval is single-pass — one query, retrieve, fuse, rank. No query rewriting or multi-hop
 until an evaluation shows them earning their cost ([ADR 0006](docs/adr/0006-plain-before-agentic.md)).
+
+## Asking
+
+```console
+$ marginalia ask "what did I conclude about agentic RAG"
+No model was called; these are the passages that matched, most relevant first.
+
+NLP/LLM.md §5.1
+  Agentic RAG (the model decides whether to retrieve) vs. retrieving every time, and
+  when *not* to go agentic — see §6.6 ...
+
+Sources:
+  - NLP/LLM.md §5.1
+  - NLP/AI Engineering Skills Map.md §3.2
+```
+
+The default provider makes **no model call and no network request** — it returns the
+passages and the sentences that match, with citations. A hosted model is used only when
+local config says so.
+
+### Retrieved text is data, never instruction
+
+This is where the provenance recorded at ingestion earns its place. A corpus assembled partly
+from saved articles contains text somebody else wrote, so a retrieval system that pipes it
+into a prompt is a prompt-injection channel — and persistent retrieval turns a one-shot
+injection into one that fires on **every future query** that retrieves the poisoned passage.
+
+Four measures, each with tests:
+
+- Passages travel in a delimited, provenance-labelled block in the **user** turn. Corpus text
+  never enters the system prompt, where injected text would read as policy.
+- The system prompt states that passage content is data, and that an instruction found inside
+  a passage is to be reported rather than followed.
+- **Answers are checked against the passages actually supplied.** A citation naming anything
+  else is surfaced as a warning instead of trusted — `Answer.grounded` is false and the
+  invented citation is printed.
+- `--trust-floor` withholds passages below a provenance tier before generating at all.
+
+None of this makes injection impossible. It makes it visible, and keeps the blast radius
+inside one answer rather than inside the index.
+
+### The data-flow boundary, restated
+
+`marginalia ask` prints to stderr how many passages and characters are about to leave the
+machine, every time the hosted provider is used, and every answer records whether it did.
 
 ## Evaluation
 
