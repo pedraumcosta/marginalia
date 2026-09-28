@@ -405,3 +405,37 @@ def test_vectors_are_float32_to_keep_the_index_small(index):
     store = NumpyVectorStore(dim=emb.dim, signature=emb.signature)
     build_dense_index(index, store, emb)
     assert np.dtype(np.float32) == store._matrix.dtype  # noqa: SLF001
+
+
+# ---- stopword handling ---------------------------------------------------------
+
+
+def test_function_words_are_dropped_from_the_expression():
+    """IDF discounts them when scoring; it does not keep them out of candidate selection."""
+    assert fts_query("what did I conclude about agentic RAG") == '"conclude" OR "agentic" OR "RAG"'
+
+
+def test_single_characters_are_dropped():
+    assert fts_query("a b compass") == '"compass"'
+
+
+def test_an_all_stopword_query_is_honoured_literally():
+    """Silence would be a worse answer than a loose one."""
+    assert fts_query("who and why") == '"who" OR "and" OR "why"'
+
+
+def test_stopword_filtering_is_case_insensitive():
+    assert fts_query("The Compass") == '"Compass"'
+
+
+def test_domain_terms_are_not_mistaken_for_stopwords():
+    for term in ("range", "chart", "light", "memory", "index", "trust", "scope"):
+        assert term in fts_query(f"the {term}")
+
+
+def test_stopwords_improve_a_natural_language_query(index):
+    """The noisy-question case that motivated the filter."""
+    hits = index.search_lexical("what did I conclude about the Mercator projection", k=3)
+    assert hits
+    top = index.chunk(hits[0][0])
+    assert "Cartography" in str(top["doc_rel"])

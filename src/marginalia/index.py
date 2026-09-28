@@ -75,6 +75,103 @@ CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(
 # extracted terms instead of passed through.
 FTS_TERM = re.compile(r"[\w]+", re.UNICODE)
 
+# Function words carry almost no retrieval signal but do drag in candidates: an OR query
+# containing "about" matches most of a prose corpus, and the noise then competes for the
+# candidate budget that fusion and reranking work within. BM25's IDF discounts them in
+# *scoring*, which is not the same as keeping them out of *candidate selection*.
+# Deliberately short and English-only -- an aggressive list starts discarding real terms.
+STOPWORDS = frozenset(
+    {
+        "a",
+        "about",
+        "again",
+        "all",
+        "am",
+        "an",
+        "and",
+        "any",
+        "are",
+        "at",
+        "be",
+        "been",
+        "being",
+        "both",
+        "but",
+        "by",
+        "can",
+        "did",
+        "do",
+        "does",
+        "doing",
+        "done",
+        "each",
+        "few",
+        "for",
+        "from",
+        "had",
+        "has",
+        "have",
+        "having",
+        "how",
+        "i",
+        "if",
+        "in",
+        "into",
+        "is",
+        "it",
+        "its",
+        "just",
+        "me",
+        "more",
+        "most",
+        "my",
+        "no",
+        "nor",
+        "not",
+        "now",
+        "of",
+        "on",
+        "only",
+        "or",
+        "other",
+        "our",
+        "over",
+        "own",
+        "same",
+        "should",
+        "so",
+        "some",
+        "such",
+        "than",
+        "that",
+        "the",
+        "then",
+        "these",
+        "this",
+        "those",
+        "to",
+        "too",
+        "under",
+        "very",
+        "was",
+        "we",
+        "were",
+        "what",
+        "when",
+        "where",
+        "which",
+        "who",
+        "whom",
+        "whose",
+        "why",
+        "will",
+        "with",
+        "you",
+        "your",
+    }
+)
+MIN_TERM_LENGTH = 2
+
 
 class IndexError_(Exception):
     """Raised for index problems that are the operator's to fix."""
@@ -90,7 +187,11 @@ def fts_query(text: str) -> str:
     terms = FTS_TERM.findall(text or "")
     if not terms:
         return ""
-    return " OR ".join(f'"{t}"' for t in terms)
+    meaningful = [t for t in terms if len(t) >= MIN_TERM_LENGTH and t.lower() not in STOPWORDS]
+    # If a query is nothing but function words, honour it literally rather than returning
+    # no results at all -- somebody searching for "who" deserves an answer, not silence.
+    chosen = meaningful or terms
+    return " OR ".join(f'"{t}"' for t in chosen)
 
 
 @dataclass(frozen=True)
