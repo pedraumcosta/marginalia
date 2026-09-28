@@ -14,5 +14,14 @@ scope:
 index:
   path: ./.index
 
+embeddings:
+  # Dependency-free and offline, so CI exercises the whole pipeline without a model
+  # download. Lexical only by construction -- see src/marginalia/embeddings.py.
+  provider: hashing
+  dim: 512
+
+retrieval:
+  candidates: 50
+
 generation:
   provider: none

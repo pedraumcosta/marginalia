@@ -11,8 +11,12 @@ import sys
 
 from . import __version__
 from .config import Config, ConfigError
-from .documents import chunk_of, discover
+from .documents import chunk_of, discover, plan_ingest
+from .embeddings import EmbeddingError, make_embedder
+from .index import Index, IndexError_
+from .retrieve import Retriever, build_dense_index
 from .scope import ScopeError
+from .store import NumpyVectorStore, StoreError
 
 
 def _add_common(p: argparse.ArgumentParser) -> None:
@@ -72,6 +76,41 @@ def build_parser() -> argparse.ArgumentParser:
     p_chunks.add_argument("--doc", metavar="REL", help="only this document (relative path)")
     p_chunks.add_argument("--max-chars", type=int, metavar="N", help="override chunk size")
     p_chunks.set_defaults(func=cmd_chunks)
+
+    p_index = sub.add_parser(
+        "index",
+        help="build or update the index",
+        description=(
+            "Chunk everything in scope and write it to the index. Documents whose content "
+            "has not changed are skipped. Pass --rebuild to discard and start over."
+        ),
+    )
+    _add_common(p_index)
+    p_index.add_argument("--rebuild", action="store_true", help="discard the index first")
+    p_index.add_argument("--no-dense", action="store_true", help="lexical only, skip embedding")
+    p_index.add_argument("--dry-run", action="store_true", help="report the plan, write nothing")
+    p_index.set_defaults(func=cmd_index)
+
+    p_search = sub.add_parser(
+        "search",
+        help="search the index",
+        description=(
+            "Hybrid retrieval: BM25 and dense search fused by reciprocal rank. Prints "
+            "ranked citations. Makes no model call beyond embedding the query."
+        ),
+    )
+    _add_common(p_search)
+    p_search.add_argument("query", nargs="+", help="what to search for")
+    p_search.add_argument("-k", type=int, default=8, metavar="N", help="results to show")
+    p_search.add_argument("--lexical", action="store_true", help="BM25 only")
+    p_search.add_argument("--dense", action="store_true", help="dense only")
+    p_search.add_argument("--snippets", action="store_true", help="show a snippet per hit")
+    p_search.add_argument("--why", action="store_true", help="show which retriever found each hit")
+    p_search.set_defaults(func=cmd_search)
+
+    p_stats = sub.add_parser("stats", help="summarise the index")
+    _add_common(p_stats)
+    p_stats.set_defaults(func=cmd_stats)
 
     return parser
 
@@ -151,6 +190,167 @@ def cmd_chunks(args: argparse.Namespace) -> int:
     return 0
 
 
+def _open_index(cfg: Config, profile: str) -> Index:
+    return Index.open(cfg.index_dir(profile))
+
+
+def cmd_index(args: argparse.Namespace) -> int:
+    cfg = Config.load(args.config)
+    profile = args.profile or cfg.default_profile
+    policy = cfg.scope(profile)
+    trust = cfg.trust_policy(profile)
+
+    docs = list(discover(policy, trust))
+    directory = cfg.index_dir(profile)
+
+    with _open_index(cfg, profile) as index:
+        if args.rebuild:
+            index.drop_documents(list(index.known_hashes()))
+            index.commit()
+        plan = plan_ingest(docs, index.known_hashes())
+
+        print(f"profile: {profile}")
+        print(plan.render())
+        if args.dry_run:
+            print("  (dry run, nothing written)")
+            return 0
+
+        if plan.removed:
+            index.drop_documents(plan.removed)
+
+        written = 0
+        for doc in plan.work:
+            chunks = chunk_of(doc)
+            index.put_document(doc, chunks)
+            written += len(chunks)
+        index.commit()
+
+        if args.no_dense:
+            index.set_meta("embedder_signature", "")
+            index.commit()
+            print(f"  {written:>6}  chunks written (lexical only)")
+            return 0
+
+        try:
+            embedder = make_embedder(cfg.embeddings)
+            store = NumpyVectorStore.open_or_create(
+                directory, dim=embedder.dim, signature=embedder.signature
+            )
+        except (EmbeddingError, StoreError) as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            print(
+                "       (records are indexed; re-run with --no-dense to skip embedding)",
+                file=sys.stderr,
+            )
+            return 1
+
+        previous = index.get_meta("embedder_signature")
+        full = args.rebuild or previous != embedder.signature or len(store) == 0
+        if full and previous and previous != embedder.signature:
+            print(f"  embedder changed ({previous} -> {embedder.signature}); rebuilding vectors")
+
+        only = None if full else [c.chunk_id for d in plan.work for c in chunk_of(d)]
+        if full:
+            store.clear()
+        embedded = build_dense_index(index, store, embedder, only=only)
+        store.save(directory)
+        index.set_meta("embedder_signature", embedder.signature)
+        index.commit()
+
+        print(f"  {written:>6}  chunks written")
+        print(f"  {embedded:>6}  chunks embedded ({embedder.signature})")
+    return 0
+
+
+def _retriever(cfg: Config, profile: str, index: Index, *, want_dense: bool) -> Retriever:
+    store = None
+    embedder = None
+    if want_dense:
+        try:
+            embedder = make_embedder(cfg.embeddings)
+            store = NumpyVectorStore.load(cfg.index_dir(profile))
+            if store.signature != embedder.signature:
+                print(
+                    f"warning: index was embedded with {store.signature!r} but configuration "
+                    f"says {embedder.signature!r}; dense search disabled. Re-run `index`.",
+                    file=sys.stderr,
+                )
+                store, embedder = None, None
+        except (EmbeddingError, StoreError):
+            store, embedder = None, None
+    return Retriever(
+        index,
+        store,
+        embedder,
+        candidates=int(cfg.retrieval.get("candidates", 50)),
+        prefer_trust=bool(cfg.retrieval.get("prefer_trust", False)),
+    )
+
+
+def cmd_search(args: argparse.Namespace) -> int:
+    cfg = Config.load(args.config)
+    profile = args.profile or cfg.default_profile
+    query = " ".join(args.query)
+
+    with _open_index(cfg, profile) as index:
+        if index.stats().chunks == 0:
+            print(
+                f"error: index for profile {profile!r} is empty. Run `marginalia index`.",
+                file=sys.stderr,
+            )
+            return 1
+        retriever = _retriever(cfg, profile, index, want_dense=not args.lexical)
+
+        if args.lexical:
+            pairs = retriever.lexical(query, args.k)
+        elif args.dense:
+            if not retriever.has_dense:
+                print("error: no dense index available. Run `marginalia index`.", file=sys.stderr)
+                return 1
+            pairs = retriever.dense(query, args.k)
+        else:
+            pairs = None
+
+        if pairs is not None:
+            rows = index.chunks_by_id([cid for cid, _ in pairs])
+            for rank, (cid, score) in enumerate(pairs, start=1):
+                row = rows.get(cid)
+                if row is None:
+                    continue
+                print(f"{rank:>3}. {row['citation']}   [{score:.4f}]")
+                if args.snippets:
+                    print(f"     {' '.join(str(row['text']).split())[:160]}")
+            return 0
+
+        hits = retriever.search(query, k=args.k)
+        if not hits:
+            print("no results")
+            return 0
+        for rank, hit in enumerate(hits, start=1):
+            print(f"{rank:>3}. {hit.citation}   [{hit.score:.4f}]")
+            if args.why:
+                detail = ", ".join(f"{name}#{pos}" for name, pos in sorted(hit.ranks.items()))
+                print(f"     via {detail}; trust={hit.trust}")
+            if args.snippets:
+                print(f"     {hit.snippet()}")
+    return 0
+
+
+def cmd_stats(args: argparse.Namespace) -> int:
+    cfg = Config.load(args.config)
+    profile = args.profile or cfg.default_profile
+    with _open_index(cfg, profile) as index:
+        print(f"profile: {profile}")
+        print(index.stats().render())
+        try:
+            store = NumpyVectorStore.load(cfg.index_dir(profile))
+            st = store.stats()
+            print(f"  vectors: {st['count']} x {st['dim']} ({int(st['bytes']) // 1024} KiB)")
+        except StoreError:
+            print("  vectors: none")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -161,7 +361,7 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         return int(args.func(args))
-    except (ConfigError, ScopeError) as exc:
+    except (ConfigError, ScopeError, IndexError_, StoreError, EmbeddingError) as exc:
         # These are user-facing configuration problems, not bugs; a traceback would
         # bury the one line that says what to fix.
         print(f"error: {exc}", file=sys.stderr)

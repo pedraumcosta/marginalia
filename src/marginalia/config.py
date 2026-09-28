@@ -192,6 +192,18 @@ class Config:
         top = self.data.get("trust")
         return TrustPolicy.from_config(top if isinstance(top, Mapping) else None)
 
+    # ---- embeddings -----------------------------------------------------------
+
+    @property
+    def embeddings(self) -> dict:
+        section = self.data.get("embeddings") or {}
+        return dict(section) if isinstance(section, Mapping) else {}
+
+    @property
+    def retrieval(self) -> dict:
+        section = self.data.get("retrieval") or {}
+        return dict(section) if isinstance(section, Mapping) else {}
+
     # ---- generation ----------------------------------------------------------
 
     @property
