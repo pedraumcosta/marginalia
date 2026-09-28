@@ -1,0 +1,18 @@
+# For users of the pre-commit framework. tools/install-hooks.sh installs the same
+# protection as a plain git hook, for those who would rather not add the dependency.
+repos:
+  - repo: local
+    hooks:
+      - id: scan-secrets
+        name: scan for credentials and personal identifiers
+        entry: python3 tools/scan_secrets.py --staged
+        language: system
+        pass_filenames: false
+        always_run: true
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
