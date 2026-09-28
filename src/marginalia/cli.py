@@ -13,6 +13,13 @@ from . import __version__
 from .config import Config, ConfigError
 from .documents import chunk_of, discover, plan_ingest
 from .embeddings import EmbeddingError, make_embedder
+from .evaluate import (
+    EvalError,
+    EvalRun,
+    load_questions,
+    render_summary,
+    run_eval,
+)
 from .index import Index, IndexError_
 from .retrieve import Retriever, build_dense_index
 from .scope import ScopeError
@@ -107,6 +114,30 @@ def build_parser() -> argparse.ArgumentParser:
     p_search.add_argument("--snippets", action="store_true", help="show a snippet per hit")
     p_search.add_argument("--why", action="store_true", help="show which retriever found each hit")
     p_search.set_defaults(func=cmd_search)
+
+    p_eval = sub.add_parser(
+        "eval",
+        help="measure retrieval against a golden set",
+        description=(
+            "Run a golden set through lexical, dense and fused retrieval and report "
+            "recall, precision, MRR and NDCG. Results are cached as JSON so metrics can "
+            "be recomputed without re-running retrieval."
+        ),
+    )
+    _add_common(p_eval)
+    p_eval.add_argument(
+        "--questions",
+        metavar="PATH",
+        default="eval/public/questions.yaml",
+        help="golden set to run (default: %(default)s)",
+    )
+    p_eval.add_argument("-k", type=int, default=10, metavar="N", help="cutoff for @k metrics")
+    p_eval.add_argument("--save", metavar="PATH", help="write the run cache here")
+    p_eval.add_argument("--load", metavar="PATH", help="recompute metrics from a cached run")
+    p_eval.add_argument(
+        "--per-question", action="store_true", help="show each question's first hit rank"
+    )
+    p_eval.set_defaults(func=cmd_eval)
 
     p_stats = sub.add_parser("stats", help="summarise the index")
     _add_common(p_stats)
@@ -336,6 +367,55 @@ def cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_eval(args: argparse.Namespace) -> int:
+    from pathlib import Path
+
+    if args.load:
+        run = EvalRun.load(Path(args.load))
+        print(render_summary(run))
+        if args.per_question:
+            _print_per_question(run)
+        return 0
+
+    cfg = Config.load(args.config)
+    profile = args.profile or cfg.default_profile
+    questions = load_questions(Path(args.questions))
+
+    with _open_index(cfg, profile) as index:
+        if index.stats().chunks == 0:
+            print(
+                f"error: index for profile {profile!r} is empty. Run `marginalia index`.",
+                file=sys.stderr,
+            )
+            return 1
+        retriever = _retriever(cfg, profile, index, want_dense=True)
+        run = run_eval(
+            retriever,
+            index,
+            questions,
+            k=args.k,
+            profile=profile,
+            embedder=index.get_meta("embedder_signature") or "",
+        )
+        run.golden_set = str(args.questions)
+
+    print(render_summary(run))
+    if args.per_question:
+        _print_per_question(run)
+    if args.save:
+        run.save(Path(args.save))
+        print(f"\ncached run written to {args.save}")
+    return 0
+
+
+def _print_per_question(run: EvalRun) -> None:
+    for name, group in run.by_retriever().items():
+        print(f"\n  {name}, first relevant rank per question:")
+        for o in group:
+            rank = o.first_rank
+            print(f"    {'-' if rank is None else rank:>3}  {o.question_id}")
+
+
 def cmd_stats(args: argparse.Namespace) -> int:
     cfg = Config.load(args.config)
     profile = args.profile or cfg.default_profile
@@ -361,7 +441,7 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         return int(args.func(args))
-    except (ConfigError, ScopeError, IndexError_, StoreError, EmbeddingError) as exc:
+    except (ConfigError, ScopeError, IndexError_, StoreError, EmbeddingError, EvalError) as exc:
         # These are user-facing configuration problems, not bugs; a traceback would
         # bury the one line that says what to fix.
         print(f"error: {exc}", file=sys.stderr)

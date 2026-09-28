@@ -1,0 +1,194 @@
+# Public golden set over the synthetic corpus in fixtures/corpus/.
+#
+# Committed and run in CI, so anyone cloning the repository can reproduce the published
+# public numbers with no private data (ADR 0008). The corpus is fiction, so these
+# questions leak nothing.
+#
+# Relevance is judged on document + section rather than on the citation string, because
+# citations carry a part suffix for split sections and chunk sizing is a knob we expect to
+# turn. `section` matches a numbered heading; `heading` matches any heading in the path;
+# a bare document name means any chunk of it counts.
+
+- id: longitude-hard
+  question: Why is longitude harder to determine than latitude?
+  relevant:
+    - doc: navigation/Navigation.md
+      section: "1"
+  tags: [factual, single-target]
+
+- id: lunar-distance-superseded
+  question: What replaced the lunar distance method in practice?
+  relevant:
+    - doc: navigation/Navigation.md
+      section: "2.2"
+  tags: [factual]
+
+- id: tight-triangle-warning
+  question: Does a tight triangle of three sights mean the fix is accurate?
+  relevant:
+    - doc: navigation/Navigation.md
+      section: "2.3"
+  tags: [reasoning, counterintuitive]
+
+- id: dead-reckoning-error
+  question: How far can an unrecorded current push a vessel off in a day?
+  relevant:
+    - doc: navigation/Navigation.md
+      section: "3"
+  tags: [factual, number]
+
+- id: deviation-vs-variation
+  question: What is the difference between compass deviation and variation?
+  relevant:
+    - doc: navigation/Navigation.md
+      section: "5.3"
+    - doc: cartography/Cartography.md
+      section: "4.2"
+  tags: [multi-target, cross-document]
+
+- id: low-altitude-sights
+  question: Why should sights below five degrees be avoided?
+  relevant:
+    - doc: navigation/Navigation.md
+      section: "5.1"
+  tags: [reasoning]
+
+- id: haze-range-reduction
+  question: How much of a light's nominal range can you expect in haze?
+  relevant:
+    - doc: lighthouses/Lighthouses.md
+      section: "3.1"
+    - doc: navigation/Navigation.md
+      section: "5.2"
+  tags: [contradiction, multi-target]
+  note: >-
+    The two documents disagree on purpose, one half against one third. A good result
+    surfaces both rather than picking one. This query was a known failure when the
+    dependency-free embedder was in use.
+
+- id: taller-tower-range
+  question: Does doubling a lighthouse tower's height double its range?
+  relevant:
+    - doc: lighthouses/Lighthouses.md
+      section: "3.2"
+  tags: [reasoning, number]
+
+- id: light-too-high
+  question: Can a lighthouse be built too high to be useful?
+  relevant:
+    - doc: lighthouses/Lighthouses.md
+      section: "3.2"
+  tags: [counterintuitive]
+
+- id: period-timing-error
+  question: How is a light's period timed, and what is the common mistake?
+  relevant:
+    - doc: lighthouses/Lighthouses.md
+      section: "4"
+  tags: [factual, procedure]
+
+- id: sector-boundary-steering
+  question: Is it safe to steer along the boundary between light sectors?
+  relevant:
+    - doc: lighthouses/Lighthouses.md
+      section: "5"
+  tags: [reasoning, safety]
+
+- id: mercator-why
+  question: Why is Mercator still used for sea charts despite distorting area?
+  relevant:
+    - doc: cartography/Cartography.md
+      section: "2"
+  tags: [reasoning]
+
+- id: angle-preserving-projections
+  question: Which projections preserve angle?
+  relevant:
+    - doc: cartography/Projections Inventory.md
+      section: "1"
+  tags: [inventory, list]
+
+- id: great-circle-planning
+  question: Which projection is used to plan a great-circle route?
+  relevant:
+    - doc: cartography/Projections Inventory.md
+      section: "4"
+  tags: [inventory]
+
+- id: sounding-density-shoal
+  question: Why might a chart fail to show a rock that is really there?
+  relevant:
+    - doc: cartography/Cartography.md
+      section: "3.3"
+  tags: [reasoning, safety]
+
+- id: triangulation-vs-running
+  question: Why is a running survey less accurate than triangulation?
+  relevant:
+    - doc: cartography/Cartography.md
+      section: "3.2"
+    - doc: cartography/Cartography.md
+      section: "3.1"
+  tags: [multi-target, comparison]
+
+- id: charted-depth-datum
+  question: Is the charted depth the shallowest the water will ever be?
+  relevant:
+    - doc: cartography/Cartography.md
+      section: "4.1"
+  tags: [reasoning, safety]
+
+- id: backstaff-advantage
+  question: What problem did the backstaff solve compared with the cross-staff?
+  relevant:
+    - doc: navigation/Instruments Inventory.md
+      heading: Angle-measuring
+  tags: [inventory, heading-target]
+
+- id: log-line-knots
+  question: What line spacing pairs with a 28-second sandglass?
+  relevant:
+    - doc: navigation/Instruments Inventory.md
+      heading: Timekeeping
+  tags: [inventory, number]
+
+- id: transit-approach
+  question: Which two lights form a transit for the harbour approach?
+  relevant:
+    - doc: lighthouses/Lighthouse Inventory.md
+      heading: Harbour and channel lights
+  tags: [inventory, cross-document]
+
+- id: discontinued-light-trap
+  question: Which light is discontinued but still appears on older charts?
+  relevant:
+    - doc: lighthouses/Lighthouse Inventory.md
+      heading: Minor and discontinued
+  tags: [inventory, safety]
+
+- id: unresolved-disagreement
+  question: Which facts in this wiki are recorded as unresolved?
+  relevant:
+    - doc: navigation/Study Plan.md
+      section: "2"
+  tags: [meta, reasoning]
+
+- id: reading-order-first
+  question: What should I read first and why?
+  relevant:
+    - doc: navigation/Study Plan.md
+      section: "1"
+  tags: [meta]
+
+- id: fouled-patent-log
+  question: Which speed measurement was trusted when the two disagreed?
+  relevant:
+    - doc: navigation/Field Notes.md
+  tags: [unstructured, document-target]
+  note: Field Notes.md has no headings, so this exercises the fallback chunking path.
+
+- id: invalid-deviation-table
+  question: Why were the compass bearings treated as suspect?
+  relevant:
+    - doc: navigation/Field Notes.md
+  tags: [unstructured, document-target]

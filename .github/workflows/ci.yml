@@ -33,3 +33,19 @@ jobs:
         with:
           python-version: "3.12"
       - run: python tools/scan_secrets.py --tracked
+
+  eval:
+    # The public golden set over the synthetic corpus. Reproducible by anyone, with no
+    # private data, and it fails the build if retrieval regresses below the recorded
+    # baseline (ADR 0008).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e '.[dev]'
+      - run: marginalia index -c fixtures/config.yaml
+      - run: marginalia eval -c fixtures/config.yaml -k 5
+      - name: check retrieval has not regressed
+        run: python tools/check_eval.py eval/public/results-hashing-k5.json --min-ndcg 0.85
