@@ -11,6 +11,7 @@ is answerable without indexing.
 
 from __future__ import annotations
 
+import contextlib
 import os
 from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass, field
@@ -100,6 +101,11 @@ class ScopePolicy:
     # scales where an exclusion list does not — the corpus this was built against
     # holds 182 such repositories, and enumerating them would go stale immediately.
     skip_nested_repos: bool = True
+    # Nested repositories to descend into anyway, named individually. Turning the rule
+    # off wholesale reopens every clone in the tree; this keeps the rule and carves out
+    # the specific holdings worth indexing. Bare names match a directory name, patterns
+    # containing "/" match the path relative to the root (e.g. "vendor/*").
+    allow_repos: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         if not self.roots:
@@ -134,7 +140,8 @@ class ScopePolicy:
         if isinstance(raw_suffixes, str):
             raw_suffixes = [raw_suffixes]
         suffixes = frozenset(
-            s if str(s).startswith(".") else f".{s}" for s in raw_suffixes  # type: ignore[union-attr]
+            s if str(s).startswith(".") else f".{s}"
+            for s in raw_suffixes  # type: ignore[union-attr]
         )
 
         raw_exclude = data.get("exclude") or []
@@ -147,6 +154,14 @@ class ScopePolicy:
             exclude=tuple(str(e) for e in raw_exclude),  # type: ignore[union-attr]
             follow_symlinks=bool(data.get("follow_symlinks", False)),
             skip_nested_repos=bool(data.get("skip_nested_repos", True)),
+            allow_repos=tuple(
+                str(r)
+                for r in (
+                    [data["allow_repos"]]
+                    if isinstance(data.get("allow_repos"), str)
+                    else (data.get("allow_repos") or [])
+                )
+            ),
             max_file_bytes=int(data.get("max_file_bytes", 2_000_000)),  # type: ignore[arg-type]
         )
 
@@ -182,6 +197,22 @@ class ScopePolicy:
     def wants_file(self, path: Path) -> bool:
         return path.suffix.lower() in self.suffixes
 
+    def _repo_allowed(self, path: Path, *, root: Path) -> bool:
+        """True when a nested repository was explicitly carved out of the pruning rule."""
+        if not self.allow_repos:
+            return False
+        try:
+            rel = path.relative_to(root).as_posix()
+        except ValueError:
+            rel = path.as_posix()
+        for pattern in self.allow_repos:
+            if "/" in pattern:
+                if fnmatch(rel, pattern):
+                    return True
+            elif fnmatch(path.name, pattern):
+                return True
+        return False
+
     @staticmethod
     def _is_repo(path: Path) -> bool:
         """True when `path` is the top of a git repository (worktrees included)."""
@@ -206,7 +237,11 @@ class ScopePolicy:
                     d
                     for d in dirnames
                     if not self.is_excluded(here / d, root=root)
-                    and not (self.skip_nested_repos and self._is_repo(here / d))
+                    and not (
+                        self.skip_nested_repos
+                        and self._is_repo(here / d)
+                        and not self._repo_allowed(here / d, root=root)
+                    )
                 ]
                 for fname in filenames:
                     fpath = here / fname
@@ -245,13 +280,12 @@ class ScopePolicy:
                 follow_symlinks=self.follow_symlinks,
                 max_file_bytes=self.max_file_bytes,
                 skip_nested_repos=self.skip_nested_repos,
+                allow_repos=self.allow_repos,
             )
             for f in single.iter_files():
                 count += 1
-                try:
+                with contextlib.suppress(OSError):
                     total_bytes += f.stat().st_size
-                except OSError:
-                    pass
             per_root.append((root, count))
             total_files += count
 
