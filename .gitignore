@@ -1,0 +1,39 @@
+# ---- privacy rails (these come first, before anything is ever staged) ----
+# Working notes that name real corpus roots, employers, or personal folders.
+*.local.md
+# Local config: real corpus paths, API keys, provider overrides.
+config.local.yaml
+config.local.yml
+*.local.yaml
+*.local.yml
+.env
+.env.*
+!.env.example
+
+# Index / derived state. Never committed: contains verbatim corpus text.
+# Default location is outside the repo (XDG), but ignore these paths regardless.
+.marginalia/
+index/
+*.sqlite
+*.sqlite3
+*.db
+*.npy
+*.faiss
+
+# Private evaluation set: questions and answers drawn from the real corpus.
+eval/private/
+eval/**/private/
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
