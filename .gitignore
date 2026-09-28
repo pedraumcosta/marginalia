@@ -15,6 +15,7 @@ config.local.yml
 .marginalia/
 index/
 .index/
+.index-minilm/
 *.sqlite
 *.sqlite3
 *.db

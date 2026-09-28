@@ -207,6 +207,11 @@ class Config:
     # ---- generation ----------------------------------------------------------
 
     @property
+    def generation(self) -> dict:
+        section = self.data.get("generation") or {}
+        return dict(section) if isinstance(section, Mapping) else {}
+
+    @property
     def generation_provider(self) -> str:
         section = self.data.get("generation") or {}
         if not isinstance(section, Mapping):

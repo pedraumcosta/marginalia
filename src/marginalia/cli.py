@@ -20,6 +20,7 @@ from .evaluate import (
     render_summary,
     run_eval,
 )
+from .generate import GenerationError, build_passages, check_trust, make_generator
 from .index import Index, IndexError_
 from .retrieve import Retriever, build_dense_index
 from .scope import ScopeError
@@ -138,6 +139,27 @@ def build_parser() -> argparse.ArgumentParser:
         "--per-question", action="store_true", help="show each question's first hit rank"
     )
     p_eval.set_defaults(func=cmd_eval)
+
+    p_ask = sub.add_parser(
+        "ask",
+        help="answer a question from the corpus, with citations",
+        description=(
+            "Retrieve, then answer. The default provider makes no model call and no "
+            "network request: it returns the matching passages and their citations. A "
+            "hosted model is used only when generation.provider says so in local config."
+        ),
+    )
+    _add_common(p_ask)
+    p_ask.add_argument("question", nargs="+")
+    p_ask.add_argument("-k", type=int, default=5, metavar="N", help="passages to retrieve")
+    p_ask.add_argument("--show-passages", action="store_true", help="print what was sent")
+    p_ask.add_argument(
+        "--trust-floor",
+        metavar="TIER",
+        help="withhold passages below this provenance tier (authored, curated, upstream, ...)",
+    )
+    p_ask.add_argument("--no-expand", action="store_true", help="do not expand to parent sections")
+    p_ask.set_defaults(func=cmd_ask)
 
     p_stats = sub.add_parser("stats", help="summarise the index")
     _add_common(p_stats)
@@ -416,6 +438,50 @@ def _print_per_question(run: EvalRun) -> None:
             print(f"    {'-' if rank is None else rank:>3}  {o.question_id}")
 
 
+def cmd_ask(args: argparse.Namespace) -> int:
+    cfg = Config.load(args.config)
+    profile = args.profile or cfg.default_profile
+    question = " ".join(args.question)
+
+    with _open_index(cfg, profile) as index:
+        if index.stats().chunks == 0:
+            print(
+                f"error: index for profile {profile!r} is empty. Run `marginalia index`.",
+                file=sys.stderr,
+            )
+            return 1
+        retriever = _retriever(cfg, profile, index, want_dense=True)
+        hits = retriever.search(question, k=args.k)
+        passages = build_passages(hits, retriever=retriever, expand=not args.no_expand)
+        floor = args.trust_floor or cfg.generation.get("trust_floor")
+        passages, trust_warnings = check_trust(passages, floor)
+
+        generator = make_generator(cfg.generation)
+        if getattr(generator, "name", "") == "anthropic":
+            print(
+                f"note: sending {len(passages)} passage(s) to the Claude API "
+                f"({len(''.join(p.text for p in passages))} characters of corpus text).",
+                file=sys.stderr,
+            )
+
+        if args.show_passages:
+            for p in passages:
+                print(f"--- {p.ref}  {p.citation}  [{p.trust}]")
+                print("    " + " ".join(p.text.split())[:300])
+            print()
+
+        answer = generator.answer(question, passages)
+        answer.warnings = [*trust_warnings, *answer.warnings]
+        print(answer.render())
+        if answer.left_machine and answer.usage:
+            print(
+                f"\n[{answer.model}: {answer.usage.get('input_tokens', 0)} in, "
+                f"{answer.usage.get('output_tokens', 0)} out]",
+                file=sys.stderr,
+            )
+    return 0
+
+
 def cmd_stats(args: argparse.Namespace) -> int:
     cfg = Config.load(args.config)
     profile = args.profile or cfg.default_profile
@@ -441,7 +507,15 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         return int(args.func(args))
-    except (ConfigError, ScopeError, IndexError_, StoreError, EmbeddingError, EvalError) as exc:
+    except (
+        ConfigError,
+        ScopeError,
+        IndexError_,
+        StoreError,
+        EmbeddingError,
+        EvalError,
+        GenerationError,
+    ) as exc:
         # These are user-facing configuration problems, not bugs; a traceback would
         # bury the one line that says what to fix.
         print(f"error: {exc}", file=sys.stderr)

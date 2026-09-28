@@ -42,10 +42,13 @@ embeddings:
   batch_size: 32
 
 generation:
-  # "none" returns ranked, cited passages and makes no model call.
-  # "local" uses a local model. "anthropic" sends retrieved chunks off-machine and
-  # must be enabled deliberately, in this file, never in the committed example.
-  provider: none
+  # "extractive" returns ranked, cited passages and makes no model call at all -- no
+  # network, no API key. "anthropic" sends the retrieved passages to the Claude API and
+  # must be enabled deliberately, here, never in the committed example.
+  provider: extractive
+  # Withhold passages below this provenance tier before generating. Unset sends
+  # everything retrieved and warns about weak provenance instead.
+  # trust_floor: curated
 
 # Provenance, recorded at ingestion rather than guessed at query time. A corpus mixing
 # your own writing with collected third-party text mixes text you wrote with text someone

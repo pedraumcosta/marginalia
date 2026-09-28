@@ -164,25 +164,31 @@ Relevance is judged on document plus section, not on the citation string — cit
 part suffix for split sections, and pinning ground truth to `(2/6)` would break the golden
 set every time chunk sizing changed.
 
-### The measured result contradicts the hybrid default
+### Hybrid retrieval helps — but only when the dense side carries signal
 
-**Fusion loses to BM25 alone, on every metric, at k = 3, 5 and 10.**
+Running the same 25 questions under two embedders answers the question that a single
+column cannot. **The embedder decides whether fusion is worth anything at all.**
 
-| k | lexical ndcg | fused ndcg | lexical hit | fused hit |
+| embedder | lexical ndcg@5 | dense ndcg@5 | fused ndcg@5 | verdict |
 |---|---|---|---|---|
-| 3 | **0.855** | 0.775 | **0.920** | 0.840 |
-| 5 | **0.880** | 0.803 | **0.960** | 0.880 |
-| 10 | **0.893** | 0.843 | 1.000 | 1.000 |
+| `hashing` (lexical by construction) | 0.880 | 0.649 | **0.803** | fusion **hurts** |
+| `all-MiniLM-L6-v2` | 0.880 | 0.888 | **0.938** | fusion **helps** |
 
-The reason is not that hybrid retrieval is a bad idea. It is that RRF assumes **both** inputs
-carry signal, and the table above was produced with the dependency-free `hashing` embedder,
-which is lexical by construction. Fusing a retriever that contributes noise costs real
-accuracy. Whether a genuine embedding model reverses this is measured separately and reported
-with the embedder named, per [ADR 0008](docs/adr/0008-eval-split.md) — a number from one
-embedder is never presented as a claim about another.
+With a real embedding model, fusion beats both retrievers it is built from — and at k=3 it
+reaches `hit@3 = 1.000` where each retriever alone manages 0.920. The reason is visible in
+the per-question misses: **lexical and dense fail on different questions.** BM25 misses
+*"What should I read first and why?"*; dense misses *"Which facts are recorded as
+unresolved?"*. Fusion covers both, which is the complementarity hybrid retrieval is supposed
+to deliver, now measured rather than assumed.
 
-The CI gate floors the *best* retriever rather than a named one, because which mode wins is
-itself a finding here.
+With the dependency-free `hashing` embedder the same fusion **costs** accuracy, because RRF
+assumes both inputs carry signal and that one does not.
+
+So the honest claim is neither "hybrid always wins" nor "hybrid is overrated". It is
+conditional, and the condition is measurable: fuse a retriever only once you can show it
+beats noise on its own. Per [ADR 0008](docs/adr/0008-eval-split.md) every number names its
+embedder, and the CI gate floors the *best* retriever rather than a named one, because which
+mode wins is a property of the configuration rather than a fact about the design.
 
 One earlier fix, also measured: **function words had to be filtered out of candidate
 selection**. BM25's IDF discounts common terms when scoring, which is not the same as keeping

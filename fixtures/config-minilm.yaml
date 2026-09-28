@@ -12,16 +12,16 @@ scope:
     skip_nested_repos: true
 
 index:
-  path: ./.index
+  path: ./.index-minilm
 
 embeddings:
-  # Dependency-free and offline, so CI exercises the whole pipeline without a model
-  # download. Lexical only by construction -- see src/marginalia/embeddings.py.
-  provider: hashing
-  dim: 512
+  # The real model, for the comparison against the hashing baseline. Not used by CI,
+  # which cannot rely on a model download; see fixtures/config.yaml for that path.
+  provider: sentence-transformers
+  model: sentence-transformers/all-MiniLM-L6-v2
 
 retrieval:
   candidates: 50
 
 generation:
-  provider: extractive
+  provider: none

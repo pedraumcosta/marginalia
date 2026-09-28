@@ -1,0 +1,1974 @@
+{
+  "profile": "fixture",
+  "embedder": "sentence-transformers:sentence-transformers/all-MiniLM-L6-v2",
+  "k": 5,
+  "corpus_chunks": 56,
+  "created_at": "2026-09-28T23:07:10+00:00",
+  "golden_set": "eval/public/questions.yaml",
+  "outcomes": [
+    {
+      "question_id": "longitude-hard",
+      "question": "Why is longitude harder to determine than latitude?",
+      "retriever": "lexical",
+      "ranked": [
+        "b1a792b84c5a5bbe",
+        "f13548384f1ae86e",
+        "4d568219401e1a50",
+        "16bebef1739c8228",
+        "d6c0cc79f84f67da"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a71",
+        "cartography/Projections Inventory.md \u00a73",
+        "navigation/Study Plan.md \u00a73",
+        "navigation/Study Plan.md \u00a71",
+        "cartography/Projections Inventory.md \u00a72"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a71"
+      ]
+    },
+    {
+      "question_id": "lunar-distance-superseded",
+      "question": "What replaced the lunar distance method in practice?",
+      "retriever": "lexical",
+      "ranked": [
+        "10d1d49996e4d1f0",
+        "b58e41929d75cf48",
+        "96dced1d703e2032",
+        "87dcb969247d9710",
+        "d3ee6ed285661d5c"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a72.2",
+        "cartography/Cartography.md \u00a73.1",
+        "navigation/Study Plan.md \u00a72",
+        "navigation/Instruments Inventory.md \u00a72",
+        "navigation/Navigation.md \u00a72.3"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a72.2"
+      ]
+    },
+    {
+      "question_id": "tight-triangle-warning",
+      "question": "Does a tight triangle of three sights mean the fix is accurate?",
+      "retriever": "lexical",
+      "ranked": [
+        "d3ee6ed285661d5c",
+        "e5c6771ab140707b",
+        "518b7e2d5bb67603",
+        "16bebef1739c8228",
+        "b58e41929d75cf48"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a72.3",
+        "navigation/Field Notes.md",
+        "navigation/Navigation.md \u00a74.1",
+        "navigation/Study Plan.md \u00a71",
+        "cartography/Cartography.md \u00a73.1"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a72.3"
+      ]
+    },
+    {
+      "question_id": "dead-reckoning-error",
+      "question": "How far can an unrecorded current push a vessel off in a day?",
+      "retriever": "lexical",
+      "ranked": [
+        "17fbd8ad56466578",
+        "d3e823e38f0e59ce",
+        "b58e41929d75cf48",
+        "6b3d7a1a7b419849",
+        "dce7d9640f2a00a4"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a73",
+        "cartography/Cartography.md \u00a74.2",
+        "cartography/Cartography.md \u00a73.1",
+        "navigation/Navigation.md \u00a75.3",
+        "cartography/Cartography.md \u00a73.2"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a73"
+      ]
+    },
+    {
+      "question_id": "deviation-vs-variation",
+      "question": "What is the difference between compass deviation and variation?",
+      "retriever": "lexical",
+      "ranked": [
+        "6b3d7a1a7b419849",
+        "d3e823e38f0e59ce",
+        "2b264e932adfe20e",
+        "9252c1b1dfa81d33",
+        "4bcf4eb1f0a34ca5"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a75.3",
+        "cartography/Cartography.md \u00a74.2",
+        "navigation/Instruments Inventory.md \u00a73",
+        "cartography/Cartography.md \u00a74.3",
+        "lighthouses/Lighthouses.md \u00a75"
+      ],
+      "positions": [
+        1,
+        2
+      ],
+      "total_relevant": 2,
+      "targets": [
+        "navigation/Navigation.md \u00a75.3",
+        "cartography/Cartography.md \u00a74.2"
+      ]
+    },
+    {
+      "question_id": "low-altitude-sights",
+      "question": "Why should sights below five degrees be avoided?",
+      "retriever": "lexical",
+      "ranked": [
+        "ef05b896682cb370",
+        "e5c6771ab140707b",
+        "d3ee6ed285661d5c",
+        "4bcf4eb1f0a34ca5",
+        "829ab8f5883980d3"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a75.1",
+        "navigation/Field Notes.md",
+        "navigation/Navigation.md \u00a72.3",
+        "lighthouses/Lighthouses.md \u00a75",
+        "navigation/Instruments Inventory.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a75.1"
+      ]
+    },
+    {
+      "question_id": "haze-range-reduction",
+      "question": "How much of a light's nominal range can you expect in haze?",
+      "retriever": "lexical",
+      "ranked": [
+        "17231fc5d612f0a6",
+        "2d113fbf93a165da",
+        "673fede414b3f0fd",
+        "6307a410a43bf895",
+        "3c77e0c6d06cfde0"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a73.1",
+        "lighthouses/Lighthouse Inventory.md \u00a74",
+        "lighthouses/Lighthouse Inventory.md \u00a71",
+        "lighthouses/Lighthouse Inventory.md \u00a72",
+        "navigation/Navigation.md \u00a75.2"
+      ],
+      "positions": [
+        1,
+        5
+      ],
+      "total_relevant": 2,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a73.1",
+        "navigation/Navigation.md \u00a75.2"
+      ]
+    },
+    {
+      "question_id": "taller-tower-range",
+      "question": "Does doubling a lighthouse tower's height double its range?",
+      "retriever": "lexical",
+      "ranked": [
+        "f6921db8418e04ea",
+        "829ab8f5883980d3",
+        "17231fc5d612f0a6",
+        "8c92bacd8d05924e",
+        "3c77e0c6d06cfde0"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a73.2",
+        "navigation/Instruments Inventory.md \u00a71",
+        "lighthouses/Lighthouses.md \u00a73.1",
+        "lighthouses/Lighthouse Inventory.md \u00a73",
+        "navigation/Navigation.md \u00a75.2"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a73.2"
+      ]
+    },
+    {
+      "question_id": "light-too-high",
+      "question": "Can a lighthouse be built too high to be useful?",
+      "retriever": "lexical",
+      "ranked": [
+        "7bab263122ee0ac9",
+        "f6921db8418e04ea",
+        "d140859b7d8cf472",
+        "518b7e2d5bb67603",
+        "57563feca871dc38"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md",
+        "lighthouses/Lighthouses.md \u00a73.2",
+        "README.md > Documents",
+        "navigation/Navigation.md \u00a74.1",
+        "README.md"
+      ],
+      "positions": [
+        2
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a73.2"
+      ]
+    },
+    {
+      "question_id": "period-timing-error",
+      "question": "How is a light's period timed, and what is the common mistake?",
+      "retriever": "lexical",
+      "ranked": [
+        "a42814620537f076",
+        "572f108a8d54b3bc",
+        "f13548384f1ae86e",
+        "4cacbd0cec58f8de",
+        "730a0ea844bc19c2"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a74",
+        "navigation/Instruments Inventory.md \u00a75",
+        "cartography/Projections Inventory.md \u00a73",
+        "lighthouses/Lighthouses.md \u00a72.3",
+        "lighthouses/Lighthouses.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a74"
+      ]
+    },
+    {
+      "question_id": "sector-boundary-steering",
+      "question": "Is it safe to steer along the boundary between light sectors?",
+      "retriever": "lexical",
+      "ranked": [
+        "4bcf4eb1f0a34ca5",
+        "730a0ea844bc19c2",
+        "6307a410a43bf895",
+        "b6098532342dc812",
+        "9252c1b1dfa81d33"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a75",
+        "lighthouses/Lighthouses.md \u00a71",
+        "lighthouses/Lighthouse Inventory.md \u00a72",
+        "cartography/Cartography.md \u00a72",
+        "cartography/Cartography.md \u00a74.3"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a75"
+      ]
+    },
+    {
+      "question_id": "mercator-why",
+      "question": "Why is Mercator still used for sea charts despite distorting area?",
+      "retriever": "lexical",
+      "ranked": [
+        "e9c590c71ace0f57",
+        "d6c0cc79f84f67da",
+        "b6098532342dc812",
+        "f43c622ee0a91f00",
+        "a464fa7a61e5447b"
+      ],
+      "citations": [
+        "cartography/Projections Inventory.md \u00a71",
+        "cartography/Projections Inventory.md \u00a72",
+        "cartography/Cartography.md \u00a72",
+        "cartography/Cartography.md \u00a71",
+        "cartography/Projections Inventory.md \u00a74"
+      ],
+      "positions": [
+        3
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Cartography.md \u00a72"
+      ]
+    },
+    {
+      "question_id": "angle-preserving-projections",
+      "question": "Which projections preserve angle?",
+      "retriever": "lexical",
+      "ranked": [
+        "e9c590c71ace0f57",
+        "c6c768e30a61c138",
+        "b6098532342dc812",
+        "d6c0cc79f84f67da",
+        "f43c622ee0a91f00"
+      ],
+      "citations": [
+        "cartography/Projections Inventory.md \u00a71",
+        "cartography/Projections Inventory.md",
+        "cartography/Cartography.md \u00a72",
+        "cartography/Projections Inventory.md \u00a72",
+        "cartography/Cartography.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Projections Inventory.md \u00a71"
+      ]
+    },
+    {
+      "question_id": "great-circle-planning",
+      "question": "Which projection is used to plan a great-circle route?",
+      "retriever": "lexical",
+      "ranked": [
+        "a464fa7a61e5447b",
+        "e9c590c71ace0f57",
+        "c6c768e30a61c138",
+        "96dced1d703e2032",
+        "e94033f24c92903d"
+      ],
+      "citations": [
+        "cartography/Projections Inventory.md \u00a74",
+        "cartography/Projections Inventory.md \u00a71",
+        "cartography/Projections Inventory.md",
+        "navigation/Study Plan.md \u00a72",
+        "cartography/Projections Inventory.md \u00a75"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Projections Inventory.md \u00a74"
+      ]
+    },
+    {
+      "question_id": "sounding-density-shoal",
+      "question": "Why might a chart fail to show a rock that is really there?",
+      "retriever": "lexical",
+      "ranked": [
+        "59fe17964e838e97",
+        "d3ee6ed285661d5c",
+        "673fede414b3f0fd",
+        "c5f17f85fafd98d1",
+        "e9c590c71ace0f57"
+      ],
+      "citations": [
+        "cartography/Cartography.md \u00a73.3",
+        "navigation/Navigation.md \u00a72.3",
+        "lighthouses/Lighthouse Inventory.md \u00a71",
+        "navigation/Navigation.md \u00a74.2",
+        "cartography/Projections Inventory.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Cartography.md \u00a73.3"
+      ]
+    },
+    {
+      "question_id": "triangulation-vs-running",
+      "question": "Why is a running survey less accurate than triangulation?",
+      "retriever": "lexical",
+      "ranked": [
+        "dce7d9640f2a00a4",
+        "b58e41929d75cf48",
+        "59fe17964e838e97",
+        "829ab8f5883980d3",
+        "7bab263122ee0ac9"
+      ],
+      "citations": [
+        "cartography/Cartography.md \u00a73.2",
+        "cartography/Cartography.md \u00a73.1",
+        "cartography/Cartography.md \u00a73.3",
+        "navigation/Instruments Inventory.md \u00a71",
+        "lighthouses/Lighthouses.md"
+      ],
+      "positions": [
+        1,
+        2
+      ],
+      "total_relevant": 2,
+      "targets": [
+        "cartography/Cartography.md \u00a73.2",
+        "cartography/Cartography.md \u00a73.1"
+      ]
+    },
+    {
+      "question_id": "charted-depth-datum",
+      "question": "Is the charted depth the shallowest the water will ever be?",
+      "retriever": "lexical",
+      "ranked": [
+        "e1ae28e8c4e9fdb5",
+        "8b77d6d2b43de09f",
+        "c5f17f85fafd98d1",
+        "dce7d9640f2a00a4",
+        "9252c1b1dfa81d33"
+      ],
+      "citations": [
+        "cartography/Cartography.md \u00a74.1",
+        "navigation/Instruments Inventory.md \u00a74",
+        "navigation/Navigation.md \u00a74.2",
+        "cartography/Cartography.md \u00a73.2",
+        "cartography/Cartography.md \u00a74.3"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Cartography.md \u00a74.1"
+      ]
+    },
+    {
+      "question_id": "backstaff-advantage",
+      "question": "What problem did the backstaff solve compared with the cross-staff?",
+      "retriever": "lexical",
+      "ranked": [
+        "829ab8f5883980d3",
+        "b1a792b84c5a5bbe",
+        "10d1d49996e4d1f0",
+        "fb71b069ad325b65",
+        "16bebef1739c8228"
+      ],
+      "citations": [
+        "navigation/Instruments Inventory.md \u00a71",
+        "navigation/Navigation.md \u00a71",
+        "navigation/Navigation.md \u00a72.2",
+        "navigation/Navigation.md \u00a72.1",
+        "navigation/Study Plan.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Instruments Inventory.md > Angle-measuring"
+      ]
+    },
+    {
+      "question_id": "log-line-knots",
+      "question": "What line spacing pairs with a 28-second sandglass?",
+      "retriever": "lexical",
+      "ranked": [
+        "87dcb969247d9710",
+        "59fe17964e838e97",
+        "8b77d6d2b43de09f",
+        "b58e41929d75cf48",
+        "673fede414b3f0fd"
+      ],
+      "citations": [
+        "navigation/Instruments Inventory.md \u00a72",
+        "cartography/Cartography.md \u00a73.3",
+        "navigation/Instruments Inventory.md \u00a74",
+        "cartography/Cartography.md \u00a73.1",
+        "lighthouses/Lighthouse Inventory.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Instruments Inventory.md > Timekeeping"
+      ]
+    },
+    {
+      "question_id": "transit-approach",
+      "question": "Which two lights form a transit for the harbour approach?",
+      "retriever": "lexical",
+      "ranked": [
+        "518b7e2d5bb67603",
+        "6307a410a43bf895",
+        "730a0ea844bc19c2",
+        "3c77e0c6d06cfde0",
+        "57563feca871dc38"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a74.1",
+        "lighthouses/Lighthouse Inventory.md \u00a72",
+        "lighthouses/Lighthouses.md \u00a71",
+        "navigation/Navigation.md \u00a75.2",
+        "README.md"
+      ],
+      "positions": [
+        2
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouse Inventory.md > Harbour and channel lights"
+      ]
+    },
+    {
+      "question_id": "discontinued-light-trap",
+      "question": "Which light is discontinued but still appears on older charts?",
+      "retriever": "lexical",
+      "ranked": [
+        "8c92bacd8d05924e",
+        "43cd48398175f78e",
+        "e8a83eb8ba42be2e",
+        "d6c0cc79f84f67da",
+        "ef05b896682cb370"
+      ],
+      "citations": [
+        "lighthouses/Lighthouse Inventory.md \u00a73",
+        "lighthouses/Lighthouses.md \u00a72.1",
+        "lighthouses/Lighthouses.md \u00a72.2",
+        "cartography/Projections Inventory.md \u00a72",
+        "navigation/Navigation.md \u00a75.1"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouse Inventory.md > Minor and discontinued"
+      ]
+    },
+    {
+      "question_id": "unresolved-disagreement",
+      "question": "Which facts in this wiki are recorded as unresolved?",
+      "retriever": "lexical",
+      "ranked": [
+        "96dced1d703e2032",
+        "57563feca871dc38",
+        "d140859b7d8cf472",
+        "e1ae28e8c4e9fdb5",
+        "dce7d9640f2a00a4"
+      ],
+      "citations": [
+        "navigation/Study Plan.md \u00a72",
+        "README.md",
+        "README.md > Documents",
+        "cartography/Cartography.md \u00a74.1",
+        "cartography/Cartography.md \u00a73.2"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Study Plan.md \u00a72"
+      ]
+    },
+    {
+      "question_id": "reading-order-first",
+      "question": "What should I read first and why?",
+      "retriever": "lexical",
+      "ranked": [
+        "e8a83eb8ba42be2e",
+        "9252c1b1dfa81d33",
+        "829ab8f5883980d3",
+        "e1ae28e8c4e9fdb5",
+        "d3e823e38f0e59ce"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a72.2",
+        "cartography/Cartography.md \u00a74.3",
+        "navigation/Instruments Inventory.md \u00a71",
+        "cartography/Cartography.md \u00a74.1",
+        "cartography/Cartography.md \u00a74.2"
+      ],
+      "positions": [],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Study Plan.md \u00a71"
+      ]
+    },
+    {
+      "question_id": "fouled-patent-log",
+      "question": "Which speed measurement was trusted when the two disagreed?",
+      "retriever": "lexical",
+      "ranked": [
+        "8b77d6d2b43de09f",
+        "3c77e0c6d06cfde0",
+        "b58e41929d75cf48",
+        "17fbd8ad56466578",
+        "e5c6771ab140707b"
+      ],
+      "citations": [
+        "navigation/Instruments Inventory.md \u00a74",
+        "navigation/Navigation.md \u00a75.2",
+        "cartography/Cartography.md \u00a73.1",
+        "navigation/Navigation.md \u00a73",
+        "navigation/Field Notes.md"
+      ],
+      "positions": [
+        5
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Field Notes.md"
+      ]
+    },
+    {
+      "question_id": "invalid-deviation-table",
+      "question": "Why were the compass bearings treated as suspect?",
+      "retriever": "lexical",
+      "ranked": [
+        "e5c6771ab140707b",
+        "2b264e932adfe20e",
+        "518b7e2d5bb67603",
+        "6b3d7a1a7b419849",
+        "b6098532342dc812"
+      ],
+      "citations": [
+        "navigation/Field Notes.md",
+        "navigation/Instruments Inventory.md \u00a73",
+        "navigation/Navigation.md \u00a74.1",
+        "navigation/Navigation.md \u00a75.3",
+        "cartography/Cartography.md \u00a72"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Field Notes.md"
+      ]
+    },
+    {
+      "question_id": "longitude-hard",
+      "question": "Why is longitude harder to determine than latitude?",
+      "retriever": "dense",
+      "ranked": [
+        "b1a792b84c5a5bbe",
+        "fb71b069ad325b65",
+        "16bebef1739c8228",
+        "b6098532342dc812",
+        "b58e41929d75cf48"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a71",
+        "navigation/Navigation.md \u00a72.1",
+        "navigation/Study Plan.md \u00a71",
+        "cartography/Cartography.md \u00a72",
+        "cartography/Cartography.md \u00a73.1"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a71"
+      ]
+    },
+    {
+      "question_id": "lunar-distance-superseded",
+      "question": "What replaced the lunar distance method in practice?",
+      "retriever": "dense",
+      "ranked": [
+        "10d1d49996e4d1f0",
+        "87dcb969247d9710",
+        "96dced1d703e2032",
+        "16bebef1739c8228",
+        "829ab8f5883980d3"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a72.2",
+        "navigation/Instruments Inventory.md \u00a72",
+        "navigation/Study Plan.md \u00a72",
+        "navigation/Study Plan.md \u00a71",
+        "navigation/Instruments Inventory.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a72.2"
+      ]
+    },
+    {
+      "question_id": "tight-triangle-warning",
+      "question": "Does a tight triangle of three sights mean the fix is accurate?",
+      "retriever": "dense",
+      "ranked": [
+        "d3ee6ed285661d5c",
+        "e5c6771ab140707b",
+        "b58e41929d75cf48",
+        "518b7e2d5bb67603",
+        "16bebef1739c8228"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a72.3",
+        "navigation/Field Notes.md",
+        "cartography/Cartography.md \u00a73.1",
+        "navigation/Navigation.md \u00a74.1",
+        "navigation/Study Plan.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a72.3"
+      ]
+    },
+    {
+      "question_id": "dead-reckoning-error",
+      "question": "How far can an unrecorded current push a vessel off in a day?",
+      "retriever": "dense",
+      "ranked": [
+        "17fbd8ad56466578",
+        "8b77d6d2b43de09f",
+        "673fede414b3f0fd",
+        "3c77e0c6d06cfde0",
+        "96dced1d703e2032"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a73",
+        "navigation/Instruments Inventory.md \u00a74",
+        "lighthouses/Lighthouse Inventory.md \u00a71",
+        "navigation/Navigation.md \u00a75.2",
+        "navigation/Study Plan.md \u00a72"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a73"
+      ]
+    },
+    {
+      "question_id": "deviation-vs-variation",
+      "question": "What is the difference between compass deviation and variation?",
+      "retriever": "dense",
+      "ranked": [
+        "6b3d7a1a7b419849",
+        "d3e823e38f0e59ce",
+        "2b264e932adfe20e",
+        "d6c0cc79f84f67da",
+        "b6098532342dc812"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a75.3",
+        "cartography/Cartography.md \u00a74.2",
+        "navigation/Instruments Inventory.md \u00a73",
+        "cartography/Projections Inventory.md \u00a72",
+        "cartography/Cartography.md \u00a72"
+      ],
+      "positions": [
+        1,
+        2
+      ],
+      "total_relevant": 2,
+      "targets": [
+        "navigation/Navigation.md \u00a75.3",
+        "cartography/Cartography.md \u00a74.2"
+      ]
+    },
+    {
+      "question_id": "low-altitude-sights",
+      "question": "Why should sights below five degrees be avoided?",
+      "retriever": "dense",
+      "ranked": [
+        "ef05b896682cb370",
+        "d3ee6ed285661d5c",
+        "829ab8f5883980d3",
+        "16bebef1739c8228",
+        "2d113fbf93a165da"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a75.1",
+        "navigation/Navigation.md \u00a72.3",
+        "navigation/Instruments Inventory.md \u00a71",
+        "navigation/Study Plan.md \u00a71",
+        "lighthouses/Lighthouse Inventory.md \u00a74"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a75.1"
+      ]
+    },
+    {
+      "question_id": "haze-range-reduction",
+      "question": "How much of a light's nominal range can you expect in haze?",
+      "retriever": "dense",
+      "ranked": [
+        "3c77e0c6d06cfde0",
+        "17231fc5d612f0a6",
+        "2d113fbf93a165da",
+        "730a0ea844bc19c2",
+        "673fede414b3f0fd"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a75.2",
+        "lighthouses/Lighthouses.md \u00a73.1",
+        "lighthouses/Lighthouse Inventory.md \u00a74",
+        "lighthouses/Lighthouses.md \u00a71",
+        "lighthouses/Lighthouse Inventory.md \u00a71"
+      ],
+      "positions": [
+        1,
+        2
+      ],
+      "total_relevant": 2,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a73.1",
+        "navigation/Navigation.md \u00a75.2"
+      ]
+    },
+    {
+      "question_id": "taller-tower-range",
+      "question": "Does doubling a lighthouse tower's height double its range?",
+      "retriever": "dense",
+      "ranked": [
+        "f6921db8418e04ea",
+        "3c77e0c6d06cfde0",
+        "2d113fbf93a165da",
+        "96dced1d703e2032",
+        "673fede414b3f0fd"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a73.2",
+        "navigation/Navigation.md \u00a75.2",
+        "lighthouses/Lighthouse Inventory.md \u00a74",
+        "navigation/Study Plan.md \u00a72",
+        "lighthouses/Lighthouse Inventory.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a73.2"
+      ]
+    },
+    {
+      "question_id": "light-too-high",
+      "question": "Can a lighthouse be built too high to be useful?",
+      "retriever": "dense",
+      "ranked": [
+        "f6921db8418e04ea",
+        "3c77e0c6d06cfde0",
+        "7bab263122ee0ac9",
+        "730a0ea844bc19c2",
+        "673fede414b3f0fd"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a73.2",
+        "navigation/Navigation.md \u00a75.2",
+        "lighthouses/Lighthouses.md",
+        "lighthouses/Lighthouses.md \u00a71",
+        "lighthouses/Lighthouse Inventory.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a73.2"
+      ]
+    },
+    {
+      "question_id": "period-timing-error",
+      "question": "How is a light's period timed, and what is the common mistake?",
+      "retriever": "dense",
+      "ranked": [
+        "a42814620537f076",
+        "730a0ea844bc19c2",
+        "fb71b069ad325b65",
+        "10d1d49996e4d1f0",
+        "96dced1d703e2032"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a74",
+        "lighthouses/Lighthouses.md \u00a71",
+        "navigation/Navigation.md \u00a72.1",
+        "navigation/Navigation.md \u00a72.2",
+        "navigation/Study Plan.md \u00a72"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a74"
+      ]
+    },
+    {
+      "question_id": "sector-boundary-steering",
+      "question": "Is it safe to steer along the boundary between light sectors?",
+      "retriever": "dense",
+      "ranked": [
+        "4bcf4eb1f0a34ca5",
+        "730a0ea844bc19c2",
+        "96dced1d703e2032",
+        "f6921db8418e04ea",
+        "3c77e0c6d06cfde0"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a75",
+        "lighthouses/Lighthouses.md \u00a71",
+        "navigation/Study Plan.md \u00a72",
+        "lighthouses/Lighthouses.md \u00a73.2",
+        "navigation/Navigation.md \u00a75.2"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a75"
+      ]
+    },
+    {
+      "question_id": "mercator-why",
+      "question": "Why is Mercator still used for sea charts despite distorting area?",
+      "retriever": "dense",
+      "ranked": [
+        "e9c590c71ace0f57",
+        "b6098532342dc812",
+        "dce7d9640f2a00a4",
+        "59fe17964e838e97",
+        "d6c0cc79f84f67da"
+      ],
+      "citations": [
+        "cartography/Projections Inventory.md \u00a71",
+        "cartography/Cartography.md \u00a72",
+        "cartography/Cartography.md \u00a73.2",
+        "cartography/Cartography.md \u00a73.3",
+        "cartography/Projections Inventory.md \u00a72"
+      ],
+      "positions": [
+        2
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Cartography.md \u00a72"
+      ]
+    },
+    {
+      "question_id": "angle-preserving-projections",
+      "question": "Which projections preserve angle?",
+      "retriever": "dense",
+      "ranked": [
+        "c6c768e30a61c138",
+        "e9c590c71ace0f57",
+        "f43c622ee0a91f00",
+        "2bb9540beaa62fa4",
+        "e94033f24c92903d"
+      ],
+      "citations": [
+        "cartography/Projections Inventory.md",
+        "cartography/Projections Inventory.md \u00a71",
+        "cartography/Cartography.md \u00a71",
+        "cartography/Cartography.md",
+        "cartography/Projections Inventory.md \u00a75"
+      ],
+      "positions": [
+        2
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Projections Inventory.md \u00a71"
+      ]
+    },
+    {
+      "question_id": "great-circle-planning",
+      "question": "Which projection is used to plan a great-circle route?",
+      "retriever": "dense",
+      "ranked": [
+        "a464fa7a61e5447b",
+        "c6c768e30a61c138",
+        "e9c590c71ace0f57",
+        "f43c622ee0a91f00",
+        "16bebef1739c8228"
+      ],
+      "citations": [
+        "cartography/Projections Inventory.md \u00a74",
+        "cartography/Projections Inventory.md",
+        "cartography/Projections Inventory.md \u00a71",
+        "cartography/Cartography.md \u00a71",
+        "navigation/Study Plan.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Projections Inventory.md \u00a74"
+      ]
+    },
+    {
+      "question_id": "sounding-density-shoal",
+      "question": "Why might a chart fail to show a rock that is really there?",
+      "retriever": "dense",
+      "ranked": [
+        "59fe17964e838e97",
+        "9252c1b1dfa81d33",
+        "f43c622ee0a91f00",
+        "e94033f24c92903d",
+        "5510be1bbd6b14bc"
+      ],
+      "citations": [
+        "cartography/Cartography.md \u00a73.3",
+        "cartography/Cartography.md \u00a74.3",
+        "cartography/Cartography.md \u00a71",
+        "cartography/Projections Inventory.md \u00a75",
+        "navigation/Navigation.md \u00a76"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Cartography.md \u00a73.3"
+      ]
+    },
+    {
+      "question_id": "triangulation-vs-running",
+      "question": "Why is a running survey less accurate than triangulation?",
+      "retriever": "dense",
+      "ranked": [
+        "dce7d9640f2a00a4",
+        "b58e41929d75cf48",
+        "d3ee6ed285661d5c",
+        "829ab8f5883980d3",
+        "59fe17964e838e97"
+      ],
+      "citations": [
+        "cartography/Cartography.md \u00a73.2",
+        "cartography/Cartography.md \u00a73.1",
+        "navigation/Navigation.md \u00a72.3",
+        "navigation/Instruments Inventory.md \u00a71",
+        "cartography/Cartography.md \u00a73.3"
+      ],
+      "positions": [
+        1,
+        2
+      ],
+      "total_relevant": 2,
+      "targets": [
+        "cartography/Cartography.md \u00a73.2",
+        "cartography/Cartography.md \u00a73.1"
+      ]
+    },
+    {
+      "question_id": "charted-depth-datum",
+      "question": "Is the charted depth the shallowest the water will ever be?",
+      "retriever": "dense",
+      "ranked": [
+        "e1ae28e8c4e9fdb5",
+        "c5f17f85fafd98d1",
+        "59fe17964e838e97",
+        "b6098532342dc812",
+        "17231fc5d612f0a6"
+      ],
+      "citations": [
+        "cartography/Cartography.md \u00a74.1",
+        "navigation/Navigation.md \u00a74.2",
+        "cartography/Cartography.md \u00a73.3",
+        "cartography/Cartography.md \u00a72",
+        "lighthouses/Lighthouses.md \u00a73.1"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Cartography.md \u00a74.1"
+      ]
+    },
+    {
+      "question_id": "backstaff-advantage",
+      "question": "What problem did the backstaff solve compared with the cross-staff?",
+      "retriever": "dense",
+      "ranked": [
+        "829ab8f5883980d3",
+        "4d568219401e1a50",
+        "d3ee6ed285661d5c",
+        "e5c6771ab140707b",
+        "518b7e2d5bb67603"
+      ],
+      "citations": [
+        "navigation/Instruments Inventory.md \u00a71",
+        "navigation/Study Plan.md \u00a73",
+        "navigation/Navigation.md \u00a72.3",
+        "navigation/Field Notes.md",
+        "navigation/Navigation.md \u00a74.1"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Instruments Inventory.md > Angle-measuring"
+      ]
+    },
+    {
+      "question_id": "log-line-knots",
+      "question": "What line spacing pairs with a 28-second sandglass?",
+      "retriever": "dense",
+      "ranked": [
+        "87dcb969247d9710",
+        "59fe17964e838e97",
+        "b58e41929d75cf48",
+        "d3ee6ed285661d5c",
+        "6307a410a43bf895"
+      ],
+      "citations": [
+        "navigation/Instruments Inventory.md \u00a72",
+        "cartography/Cartography.md \u00a73.3",
+        "cartography/Cartography.md \u00a73.1",
+        "navigation/Navigation.md \u00a72.3",
+        "lighthouses/Lighthouse Inventory.md \u00a72"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Instruments Inventory.md > Timekeeping"
+      ]
+    },
+    {
+      "question_id": "transit-approach",
+      "question": "Which two lights form a transit for the harbour approach?",
+      "retriever": "dense",
+      "ranked": [
+        "6307a410a43bf895",
+        "7bab263122ee0ac9",
+        "730a0ea844bc19c2",
+        "e8a83eb8ba42be2e",
+        "518b7e2d5bb67603"
+      ],
+      "citations": [
+        "lighthouses/Lighthouse Inventory.md \u00a72",
+        "lighthouses/Lighthouses.md",
+        "lighthouses/Lighthouses.md \u00a71",
+        "lighthouses/Lighthouses.md \u00a72.2",
+        "navigation/Navigation.md \u00a74.1"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouse Inventory.md > Harbour and channel lights"
+      ]
+    },
+    {
+      "question_id": "discontinued-light-trap",
+      "question": "Which light is discontinued but still appears on older charts?",
+      "retriever": "dense",
+      "ranked": [
+        "8c92bacd8d05924e",
+        "43cd48398175f78e",
+        "a42814620537f076",
+        "e8a83eb8ba42be2e",
+        "71c0b5725b24b0fc"
+      ],
+      "citations": [
+        "lighthouses/Lighthouse Inventory.md \u00a73",
+        "lighthouses/Lighthouses.md \u00a72.1",
+        "lighthouses/Lighthouses.md \u00a74",
+        "lighthouses/Lighthouses.md \u00a72.2",
+        "lighthouses/Lighthouse Inventory.md"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouse Inventory.md > Minor and discontinued"
+      ]
+    },
+    {
+      "question_id": "unresolved-disagreement",
+      "question": "Which facts in this wiki are recorded as unresolved?",
+      "retriever": "dense",
+      "ranked": [
+        "57563feca871dc38",
+        "e94033f24c92903d",
+        "3d43866ce97dd417",
+        "5510be1bbd6b14bc",
+        "d140859b7d8cf472"
+      ],
+      "citations": [
+        "README.md",
+        "cartography/Projections Inventory.md \u00a75",
+        "cartography/Cartography.md \u00a75",
+        "navigation/Navigation.md \u00a76",
+        "README.md > Documents"
+      ],
+      "positions": [],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Study Plan.md \u00a72"
+      ]
+    },
+    {
+      "question_id": "reading-order-first",
+      "question": "What should I read first and why?",
+      "retriever": "dense",
+      "ranked": [
+        "e7988c2d1f24bc55",
+        "d140859b7d8cf472",
+        "16bebef1739c8228",
+        "4d568219401e1a50",
+        "57563feca871dc38"
+      ],
+      "citations": [
+        "navigation/Study Plan.md",
+        "README.md > Documents",
+        "navigation/Study Plan.md \u00a71",
+        "navigation/Study Plan.md \u00a73",
+        "README.md"
+      ],
+      "positions": [
+        3
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Study Plan.md \u00a71"
+      ]
+    },
+    {
+      "question_id": "fouled-patent-log",
+      "question": "Which speed measurement was trusted when the two disagreed?",
+      "retriever": "dense",
+      "ranked": [
+        "10d1d49996e4d1f0",
+        "96dced1d703e2032",
+        "87dcb969247d9710",
+        "e5c6771ab140707b",
+        "518b7e2d5bb67603"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a72.2",
+        "navigation/Study Plan.md \u00a72",
+        "navigation/Instruments Inventory.md \u00a72",
+        "navigation/Field Notes.md",
+        "navigation/Navigation.md \u00a74.1"
+      ],
+      "positions": [
+        4
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Field Notes.md"
+      ]
+    },
+    {
+      "question_id": "invalid-deviation-table",
+      "question": "Why were the compass bearings treated as suspect?",
+      "retriever": "dense",
+      "ranked": [
+        "e5c6771ab140707b",
+        "2b264e932adfe20e",
+        "518b7e2d5bb67603",
+        "6b3d7a1a7b419849",
+        "dce7d9640f2a00a4"
+      ],
+      "citations": [
+        "navigation/Field Notes.md",
+        "navigation/Instruments Inventory.md \u00a73",
+        "navigation/Navigation.md \u00a74.1",
+        "navigation/Navigation.md \u00a75.3",
+        "cartography/Cartography.md \u00a73.2"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Field Notes.md"
+      ]
+    },
+    {
+      "question_id": "longitude-hard",
+      "question": "Why is longitude harder to determine than latitude?",
+      "retriever": "fused",
+      "ranked": [
+        "b1a792b84c5a5bbe",
+        "16bebef1739c8228",
+        "fb71b069ad325b65",
+        "f13548384f1ae86e",
+        "4d568219401e1a50"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a71",
+        "navigation/Study Plan.md \u00a71",
+        "navigation/Navigation.md \u00a72.1",
+        "cartography/Projections Inventory.md \u00a73",
+        "navigation/Study Plan.md \u00a73"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a71"
+      ]
+    },
+    {
+      "question_id": "lunar-distance-superseded",
+      "question": "What replaced the lunar distance method in practice?",
+      "retriever": "fused",
+      "ranked": [
+        "10d1d49996e4d1f0",
+        "87dcb969247d9710",
+        "96dced1d703e2032",
+        "16bebef1739c8228",
+        "b58e41929d75cf48"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a72.2",
+        "navigation/Instruments Inventory.md \u00a72",
+        "navigation/Study Plan.md \u00a72",
+        "navigation/Study Plan.md \u00a71",
+        "cartography/Cartography.md \u00a73.1"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a72.2"
+      ]
+    },
+    {
+      "question_id": "tight-triangle-warning",
+      "question": "Does a tight triangle of three sights mean the fix is accurate?",
+      "retriever": "fused",
+      "ranked": [
+        "d3ee6ed285661d5c",
+        "e5c6771ab140707b",
+        "518b7e2d5bb67603",
+        "b58e41929d75cf48",
+        "16bebef1739c8228"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a72.3",
+        "navigation/Field Notes.md",
+        "navigation/Navigation.md \u00a74.1",
+        "cartography/Cartography.md \u00a73.1",
+        "navigation/Study Plan.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a72.3"
+      ]
+    },
+    {
+      "question_id": "dead-reckoning-error",
+      "question": "How far can an unrecorded current push a vessel off in a day?",
+      "retriever": "fused",
+      "ranked": [
+        "17fbd8ad56466578",
+        "8b77d6d2b43de09f",
+        "6b3d7a1a7b419849",
+        "dce7d9640f2a00a4",
+        "d3e823e38f0e59ce"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a73",
+        "navigation/Instruments Inventory.md \u00a74",
+        "navigation/Navigation.md \u00a75.3",
+        "cartography/Cartography.md \u00a73.2",
+        "cartography/Cartography.md \u00a74.2"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a73"
+      ]
+    },
+    {
+      "question_id": "deviation-vs-variation",
+      "question": "What is the difference between compass deviation and variation?",
+      "retriever": "fused",
+      "ranked": [
+        "6b3d7a1a7b419849",
+        "d3e823e38f0e59ce",
+        "2b264e932adfe20e",
+        "e5c6771ab140707b",
+        "b6098532342dc812"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a75.3",
+        "cartography/Cartography.md \u00a74.2",
+        "navigation/Instruments Inventory.md \u00a73",
+        "navigation/Field Notes.md",
+        "cartography/Cartography.md \u00a72"
+      ],
+      "positions": [
+        1,
+        2
+      ],
+      "total_relevant": 2,
+      "targets": [
+        "navigation/Navigation.md \u00a75.3",
+        "cartography/Cartography.md \u00a74.2"
+      ]
+    },
+    {
+      "question_id": "low-altitude-sights",
+      "question": "Why should sights below five degrees be avoided?",
+      "retriever": "fused",
+      "ranked": [
+        "ef05b896682cb370",
+        "d3ee6ed285661d5c",
+        "829ab8f5883980d3",
+        "16bebef1739c8228",
+        "e5c6771ab140707b"
+      ],
+      "citations": [
+        "navigation/Navigation.md \u00a75.1",
+        "navigation/Navigation.md \u00a72.3",
+        "navigation/Instruments Inventory.md \u00a71",
+        "navigation/Study Plan.md \u00a71",
+        "navigation/Field Notes.md"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Navigation.md \u00a75.1"
+      ]
+    },
+    {
+      "question_id": "haze-range-reduction",
+      "question": "How much of a light's nominal range can you expect in haze?",
+      "retriever": "fused",
+      "ranked": [
+        "17231fc5d612f0a6",
+        "2d113fbf93a165da",
+        "3c77e0c6d06cfde0",
+        "673fede414b3f0fd",
+        "730a0ea844bc19c2"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a73.1",
+        "lighthouses/Lighthouse Inventory.md \u00a74",
+        "navigation/Navigation.md \u00a75.2",
+        "lighthouses/Lighthouse Inventory.md \u00a71",
+        "lighthouses/Lighthouses.md \u00a71"
+      ],
+      "positions": [
+        1,
+        3
+      ],
+      "total_relevant": 2,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a73.1",
+        "navigation/Navigation.md \u00a75.2"
+      ]
+    },
+    {
+      "question_id": "taller-tower-range",
+      "question": "Does doubling a lighthouse tower's height double its range?",
+      "retriever": "fused",
+      "ranked": [
+        "f6921db8418e04ea",
+        "3c77e0c6d06cfde0",
+        "8c92bacd8d05924e",
+        "2d113fbf93a165da",
+        "673fede414b3f0fd"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a73.2",
+        "navigation/Navigation.md \u00a75.2",
+        "lighthouses/Lighthouse Inventory.md \u00a73",
+        "lighthouses/Lighthouse Inventory.md \u00a74",
+        "lighthouses/Lighthouse Inventory.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a73.2"
+      ]
+    },
+    {
+      "question_id": "light-too-high",
+      "question": "Can a lighthouse be built too high to be useful?",
+      "retriever": "fused",
+      "ranked": [
+        "f6921db8418e04ea",
+        "7bab263122ee0ac9",
+        "3c77e0c6d06cfde0",
+        "96dced1d703e2032",
+        "2d113fbf93a165da"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a73.2",
+        "lighthouses/Lighthouses.md",
+        "navigation/Navigation.md \u00a75.2",
+        "navigation/Study Plan.md \u00a72",
+        "lighthouses/Lighthouse Inventory.md \u00a74"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a73.2"
+      ]
+    },
+    {
+      "question_id": "period-timing-error",
+      "question": "How is a light's period timed, and what is the common mistake?",
+      "retriever": "fused",
+      "ranked": [
+        "a42814620537f076",
+        "730a0ea844bc19c2",
+        "10d1d49996e4d1f0",
+        "b1a792b84c5a5bbe",
+        "4cacbd0cec58f8de"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a74",
+        "lighthouses/Lighthouses.md \u00a71",
+        "navigation/Navigation.md \u00a72.2",
+        "navigation/Navigation.md \u00a71",
+        "lighthouses/Lighthouses.md \u00a72.3"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a74"
+      ]
+    },
+    {
+      "question_id": "sector-boundary-steering",
+      "question": "Is it safe to steer along the boundary between light sectors?",
+      "retriever": "fused",
+      "ranked": [
+        "4bcf4eb1f0a34ca5",
+        "730a0ea844bc19c2",
+        "6307a410a43bf895",
+        "96dced1d703e2032",
+        "3c77e0c6d06cfde0"
+      ],
+      "citations": [
+        "lighthouses/Lighthouses.md \u00a75",
+        "lighthouses/Lighthouses.md \u00a71",
+        "lighthouses/Lighthouse Inventory.md \u00a72",
+        "navigation/Study Plan.md \u00a72",
+        "navigation/Navigation.md \u00a75.2"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouses.md \u00a75"
+      ]
+    },
+    {
+      "question_id": "mercator-why",
+      "question": "Why is Mercator still used for sea charts despite distorting area?",
+      "retriever": "fused",
+      "ranked": [
+        "e9c590c71ace0f57",
+        "b6098532342dc812",
+        "d6c0cc79f84f67da",
+        "f43c622ee0a91f00",
+        "2bb9540beaa62fa4"
+      ],
+      "citations": [
+        "cartography/Projections Inventory.md \u00a71",
+        "cartography/Cartography.md \u00a72",
+        "cartography/Projections Inventory.md \u00a72",
+        "cartography/Cartography.md \u00a71",
+        "cartography/Cartography.md"
+      ],
+      "positions": [
+        2
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Cartography.md \u00a72"
+      ]
+    },
+    {
+      "question_id": "angle-preserving-projections",
+      "question": "Which projections preserve angle?",
+      "retriever": "fused",
+      "ranked": [
+        "c6c768e30a61c138",
+        "e9c590c71ace0f57",
+        "f43c622ee0a91f00",
+        "b6098532342dc812",
+        "e94033f24c92903d"
+      ],
+      "citations": [
+        "cartography/Projections Inventory.md",
+        "cartography/Projections Inventory.md \u00a71",
+        "cartography/Cartography.md \u00a71",
+        "cartography/Cartography.md \u00a72",
+        "cartography/Projections Inventory.md \u00a75"
+      ],
+      "positions": [
+        2
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Projections Inventory.md \u00a71"
+      ]
+    },
+    {
+      "question_id": "great-circle-planning",
+      "question": "Which projection is used to plan a great-circle route?",
+      "retriever": "fused",
+      "ranked": [
+        "a464fa7a61e5447b",
+        "c6c768e30a61c138",
+        "e9c590c71ace0f57",
+        "e94033f24c92903d",
+        "d6c0cc79f84f67da"
+      ],
+      "citations": [
+        "cartography/Projections Inventory.md \u00a74",
+        "cartography/Projections Inventory.md",
+        "cartography/Projections Inventory.md \u00a71",
+        "cartography/Projections Inventory.md \u00a75",
+        "cartography/Projections Inventory.md \u00a72"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Projections Inventory.md \u00a74"
+      ]
+    },
+    {
+      "question_id": "sounding-density-shoal",
+      "question": "Why might a chart fail to show a rock that is really there?",
+      "retriever": "fused",
+      "ranked": [
+        "59fe17964e838e97",
+        "c5f17f85fafd98d1",
+        "9252c1b1dfa81d33",
+        "673fede414b3f0fd",
+        "e1ae28e8c4e9fdb5"
+      ],
+      "citations": [
+        "cartography/Cartography.md \u00a73.3",
+        "navigation/Navigation.md \u00a74.2",
+        "cartography/Cartography.md \u00a74.3",
+        "lighthouses/Lighthouse Inventory.md \u00a71",
+        "cartography/Cartography.md \u00a74.1"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Cartography.md \u00a73.3"
+      ]
+    },
+    {
+      "question_id": "triangulation-vs-running",
+      "question": "Why is a running survey less accurate than triangulation?",
+      "retriever": "fused",
+      "ranked": [
+        "dce7d9640f2a00a4",
+        "b58e41929d75cf48",
+        "59fe17964e838e97",
+        "829ab8f5883980d3",
+        "57563feca871dc38"
+      ],
+      "citations": [
+        "cartography/Cartography.md \u00a73.2",
+        "cartography/Cartography.md \u00a73.1",
+        "cartography/Cartography.md \u00a73.3",
+        "navigation/Instruments Inventory.md \u00a71",
+        "README.md"
+      ],
+      "positions": [
+        1,
+        2
+      ],
+      "total_relevant": 2,
+      "targets": [
+        "cartography/Cartography.md \u00a73.2",
+        "cartography/Cartography.md \u00a73.1"
+      ]
+    },
+    {
+      "question_id": "charted-depth-datum",
+      "question": "Is the charted depth the shallowest the water will ever be?",
+      "retriever": "fused",
+      "ranked": [
+        "e1ae28e8c4e9fdb5",
+        "c5f17f85fafd98d1",
+        "dce7d9640f2a00a4",
+        "b6098532342dc812",
+        "59fe17964e838e97"
+      ],
+      "citations": [
+        "cartography/Cartography.md \u00a74.1",
+        "navigation/Navigation.md \u00a74.2",
+        "cartography/Cartography.md \u00a73.2",
+        "cartography/Cartography.md \u00a72",
+        "cartography/Cartography.md \u00a73.3"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "cartography/Cartography.md \u00a74.1"
+      ]
+    },
+    {
+      "question_id": "backstaff-advantage",
+      "question": "What problem did the backstaff solve compared with the cross-staff?",
+      "retriever": "fused",
+      "ranked": [
+        "829ab8f5883980d3",
+        "10d1d49996e4d1f0",
+        "16bebef1739c8228",
+        "57563feca871dc38",
+        "b1a792b84c5a5bbe"
+      ],
+      "citations": [
+        "navigation/Instruments Inventory.md \u00a71",
+        "navigation/Navigation.md \u00a72.2",
+        "navigation/Study Plan.md \u00a71",
+        "README.md",
+        "navigation/Navigation.md \u00a71"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Instruments Inventory.md > Angle-measuring"
+      ]
+    },
+    {
+      "question_id": "log-line-knots",
+      "question": "What line spacing pairs with a 28-second sandglass?",
+      "retriever": "fused",
+      "ranked": [
+        "87dcb969247d9710",
+        "59fe17964e838e97",
+        "b58e41929d75cf48",
+        "8b77d6d2b43de09f",
+        "d3ee6ed285661d5c"
+      ],
+      "citations": [
+        "navigation/Instruments Inventory.md \u00a72",
+        "cartography/Cartography.md \u00a73.3",
+        "cartography/Cartography.md \u00a73.1",
+        "navigation/Instruments Inventory.md \u00a74",
+        "navigation/Navigation.md \u00a72.3"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Instruments Inventory.md > Timekeeping"
+      ]
+    },
+    {
+      "question_id": "transit-approach",
+      "question": "Which two lights form a transit for the harbour approach?",
+      "retriever": "fused",
+      "ranked": [
+        "6307a410a43bf895",
+        "518b7e2d5bb67603",
+        "730a0ea844bc19c2",
+        "43cd48398175f78e",
+        "3c77e0c6d06cfde0"
+      ],
+      "citations": [
+        "lighthouses/Lighthouse Inventory.md \u00a72",
+        "navigation/Navigation.md \u00a74.1",
+        "lighthouses/Lighthouses.md \u00a71",
+        "lighthouses/Lighthouses.md \u00a72.1",
+        "navigation/Navigation.md \u00a75.2"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouse Inventory.md > Harbour and channel lights"
+      ]
+    },
+    {
+      "question_id": "discontinued-light-trap",
+      "question": "Which light is discontinued but still appears on older charts?",
+      "retriever": "fused",
+      "ranked": [
+        "8c92bacd8d05924e",
+        "43cd48398175f78e",
+        "e8a83eb8ba42be2e",
+        "a42814620537f076",
+        "3c77e0c6d06cfde0"
+      ],
+      "citations": [
+        "lighthouses/Lighthouse Inventory.md \u00a73",
+        "lighthouses/Lighthouses.md \u00a72.1",
+        "lighthouses/Lighthouses.md \u00a72.2",
+        "lighthouses/Lighthouses.md \u00a74",
+        "navigation/Navigation.md \u00a75.2"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "lighthouses/Lighthouse Inventory.md > Minor and discontinued"
+      ]
+    },
+    {
+      "question_id": "unresolved-disagreement",
+      "question": "Which facts in this wiki are recorded as unresolved?",
+      "retriever": "fused",
+      "ranked": [
+        "57563feca871dc38",
+        "96dced1d703e2032",
+        "d140859b7d8cf472",
+        "4d568219401e1a50",
+        "f13548384f1ae86e"
+      ],
+      "citations": [
+        "README.md",
+        "navigation/Study Plan.md \u00a72",
+        "README.md > Documents",
+        "navigation/Study Plan.md \u00a73",
+        "cartography/Projections Inventory.md \u00a73"
+      ],
+      "positions": [
+        2
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Study Plan.md \u00a72"
+      ]
+    },
+    {
+      "question_id": "reading-order-first",
+      "question": "What should I read first and why?",
+      "retriever": "fused",
+      "ranked": [
+        "e7988c2d1f24bc55",
+        "16bebef1739c8228",
+        "d140859b7d8cf472",
+        "e8a83eb8ba42be2e",
+        "c5ab80277a0c637f"
+      ],
+      "citations": [
+        "navigation/Study Plan.md",
+        "navigation/Study Plan.md \u00a71",
+        "README.md > Documents",
+        "lighthouses/Lighthouses.md \u00a72.2",
+        "navigation/Navigation.md"
+      ],
+      "positions": [
+        2
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Study Plan.md \u00a71"
+      ]
+    },
+    {
+      "question_id": "fouled-patent-log",
+      "question": "Which speed measurement was trusted when the two disagreed?",
+      "retriever": "fused",
+      "ranked": [
+        "e5c6771ab140707b",
+        "87dcb969247d9710",
+        "17fbd8ad56466578",
+        "b58e41929d75cf48",
+        "518b7e2d5bb67603"
+      ],
+      "citations": [
+        "navigation/Field Notes.md",
+        "navigation/Instruments Inventory.md \u00a72",
+        "navigation/Navigation.md \u00a73",
+        "cartography/Cartography.md \u00a73.1",
+        "navigation/Navigation.md \u00a74.1"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Field Notes.md"
+      ]
+    },
+    {
+      "question_id": "invalid-deviation-table",
+      "question": "Why were the compass bearings treated as suspect?",
+      "retriever": "fused",
+      "ranked": [
+        "e5c6771ab140707b",
+        "2b264e932adfe20e",
+        "518b7e2d5bb67603",
+        "6b3d7a1a7b419849",
+        "b6098532342dc812"
+      ],
+      "citations": [
+        "navigation/Field Notes.md",
+        "navigation/Instruments Inventory.md \u00a73",
+        "navigation/Navigation.md \u00a74.1",
+        "navigation/Navigation.md \u00a75.3",
+        "cartography/Cartography.md \u00a72"
+      ],
+      "positions": [
+        1
+      ],
+      "total_relevant": 1,
+      "targets": [
+        "navigation/Field Notes.md"
+      ]
+    }
+  ]
+}
