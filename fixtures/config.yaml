@@ -1,0 +1,18 @@
+# Scope for the synthetic corpus. Committed, and safe to commit: the corpus is fiction.
+# Used by the test suite and by the public evaluation set (ADR 0008), so anyone who clones
+# this repository can reproduce the published public numbers with no private data.
+scope:
+  default_profile: fixture
+  profiles:
+    fixture:
+      roots:
+        - corpus
+  defaults:
+    suffixes: [.md, .markdown]
+    skip_nested_repos: true
+
+index:
+  path: ./.index
+
+generation:
+  provider: none
