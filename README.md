@@ -3,9 +3,9 @@
 Retrieval over a Markdown knowledge wiki — local embeddings, citations in the wiki's own
 `file §section` idiom, and an evaluation harness that reports numbers rather than claims.
 
-> **Status: in development.** Scoping, safety rails, ingestion, indexing and hybrid
-> retrieval work. Evaluation is next, and until it exists treat every quality claim below
-> as unmeasured. See [`docs/adr/`](docs/adr/) for the decisions
+> **Status: in development.** Scoping, safety rails, ingestion, indexing, hybrid retrieval
+> and evaluation all work. Numbers below are measured and reproducible; the generation
+> layer is not built yet. See [`docs/adr/`](docs/adr/) for the decisions
 > already made and, as importantly, what was rejected.
 
 ## Why this exists
@@ -137,24 +137,67 @@ measured. RRF reads only rank positions.
 Retrieval is single-pass — one query, retrieve, fuse, rank. No query rewriting or multi-hop
 until an evaluation shows them earning their cost ([ADR 0006](docs/adr/0006-plain-before-agentic.md)).
 
-### Honest note on quality
+## Evaluation
 
-Two findings from running this against a real corpus, both pending proper measurement:
+25 questions over the synthetic corpus, committed, so these numbers are reproducible by
+anyone with no private data:
 
-1. **Function words had to be filtered out of candidate selection.** BM25's IDF discounts
-   common terms when scoring, which is not the same as keeping them out of the candidate set.
-   Before the filter, *"what did I conclude about agentic RAG"* returned a management
-   playbook's hiring section first.
-2. **Fusing an uninformative retriever makes results worse.** With the dependency-free
-   `hashing` embedder, lexical-only retrieval ranks the right section third on one query
-   while the fused result does not surface it at all. RRF assumes both inputs carry signal.
-   Hybrid retrieval is a hypothesis to measure, not a default to assume — which is what
-   Phase 4 is for.
+```console
+$ marginalia index -c fixtures/config.yaml
+$ marginalia eval  -c fixtures/config.yaml -k 5
+
+  retriever           hit@5     recall@5  precision@5          mrr       ndcg@5
+  lexical             0.960        0.960        0.216        0.861        0.880
+  dense               0.800        0.780        0.176        0.607        0.649
+  fused               0.880        0.880        0.200        0.783        0.803
+```
+
+Metrics are recall, precision, MRR and NDCG at k, with the metric functions tested against
+values computed by hand. Runs are cached as JSON and metrics recompute from the cache, so a
+figure can be re-derived with no index present and nothing re-embedded:
+
+```console
+$ marginalia eval --load eval/public/results-hashing-k5.json
+```
+
+Relevance is judged on document plus section, not on the citation string — citations carry a
+part suffix for split sections, and pinning ground truth to `(2/6)` would break the golden
+set every time chunk sizing changed.
+
+### The measured result contradicts the hybrid default
+
+**Fusion loses to BM25 alone, on every metric, at k = 3, 5 and 10.**
+
+| k | lexical ndcg | fused ndcg | lexical hit | fused hit |
+|---|---|---|---|---|
+| 3 | **0.855** | 0.775 | **0.920** | 0.840 |
+| 5 | **0.880** | 0.803 | **0.960** | 0.880 |
+| 10 | **0.893** | 0.843 | 1.000 | 1.000 |
+
+The reason is not that hybrid retrieval is a bad idea. It is that RRF assumes **both** inputs
+carry signal, and the table above was produced with the dependency-free `hashing` embedder,
+which is lexical by construction. Fusing a retriever that contributes noise costs real
+accuracy. Whether a genuine embedding model reverses this is measured separately and reported
+with the embedder named, per [ADR 0008](docs/adr/0008-eval-split.md) — a number from one
+embedder is never presented as a claim about another.
+
+The CI gate floors the *best* retriever rather than a named one, because which mode wins is
+itself a finding here.
+
+One earlier fix, also measured: **function words had to be filtered out of candidate
+selection**. BM25's IDF discounts common terms when scoring, which is not the same as keeping
+them out of the candidate set. Before the filter, *"what did I conclude about agentic RAG"*
+returned a management playbook's hiring section first.
 
 ## Development
 
 ```console
 $ pip install -e '.[dev]'
+$ # For real embeddings, install CPU-only torch first. The default Linux torch wheel
+$ # pulls several GB of NVIDIA CUDA packages that this project never uses; the CPU
+$ # index is ~196 MB.
+$ pip install torch --index-url https://download.pytorch.org/whl/cpu
+$ pip install -e '.[embed]'
 $ sh tools/install-hooks.sh      # refuses commits containing credentials
 $ pytest -q
 $ ruff check . && ruff format --check .

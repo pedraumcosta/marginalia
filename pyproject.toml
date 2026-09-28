@@ -16,6 +16,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+# Install CPU-only torch first, or pip resolves several GB of NVIDIA CUDA packages that
+# this project never uses (ADR 0003 runs the model on CPU):
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
 embed = ["sentence-transformers>=3.0"]
 rerank = ["sentence-transformers>=3.0"]
 anthropic = ["anthropic>=0.40"]
