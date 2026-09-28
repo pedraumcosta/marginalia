@@ -1,0 +1,48 @@
+# Copy to config.local.yaml and edit. config.local.yaml is gitignored: it holds real
+# paths, and a path can itself be sensitive information.
+
+scope:
+  # Deny-by-default. Nothing is indexed unless its root is listed here (ADR 0005).
+  # List the directories holding writing you authored, not whole home directories.
+  roots:
+    - ~/notes
+    - ~/wiki/reference
+
+  # File types to index.
+  suffixes: [.md, .markdown]
+
+  # Extra exclusions, unioned with the built-in secret and vendor patterns in
+  # marginalia.scope.ALWAYS_EXCLUDE. Bare names match any path component;
+  # patterns containing "/" match the path relative to the root.
+  exclude:
+    - Papers          # PDFs and binaries: nothing to chunk
+    - figures
+    - drafts/*
+  # Note: sensitive material is rarely confined to one root. Expect to exclude a
+  # few scattered files by name as well as whole directories -- run
+  # `marginalia scope` and read the list before the first index.
+
+  # Prune any subdirectory that is itself a git repository. Cloned dependencies,
+  # course sample code and vendored tools are somebody else's writing, and a rule
+  # scales where an exclusion list goes stale.
+  skip_nested_repos: true
+
+  # Symlinks are an escape route out of the allowlist.
+  follow_symlinks: false
+  max_file_bytes: 2000000
+
+index:
+  # Derived, rebuildable state. Kept outside the repository by default so a
+  # misconfigured path cannot put corpus text under version control (ADR 0001).
+  path: ~/.local/share/marginalia
+
+embeddings:
+  # Always local, by design. There is no hosted option (ADR 0003).
+  model: sentence-transformers/all-MiniLM-L6-v2
+  batch_size: 32
+
+generation:
+  # "none" returns ranked, cited passages and makes no model call.
+  # "local" uses a local model. "anthropic" sends retrieved chunks off-machine and
+  # must be enabled deliberately, in this file, never in the committed example.
+  provider: none
