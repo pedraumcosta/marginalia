@@ -3,8 +3,9 @@
 Retrieval over a Markdown knowledge wiki — local embeddings, citations in the wiki's own
 `file §section` idiom, and an evaluation harness that reports numbers rather than claims.
 
-> **Status: in development.** Scoping, safety rails and ingestion are in place; indexing,
-> retrieval and evaluation are not yet built. See [`docs/adr/`](docs/adr/) for the decisions
+> **Status: in development.** Scoping, safety rails, ingestion, indexing and hybrid
+> retrieval work. Evaluation is next, and until it exists treat every quality claim below
+> as unmeasured. See [`docs/adr/`](docs/adr/) for the decisions
 > already made and, as importantly, what was rejected.
 
 ## Why this exists
@@ -100,6 +101,55 @@ mixing your own writing with collected third-party text mixes text you wrote wit
 somebody else could have written, and persistent retrieval turns a one-shot prompt injection
 into a durable one. The default tier is `unknown`, because over-trusting by default is the
 failure mode that matters.
+
+## Searching
+
+```console
+$ marginalia index
+profile: authored
+      35  added
+     958  chunks written
+     958  chunks embedded
+
+$ marginalia search --why "memory injection attack numbers"
+  1. NLP/LLM.md §6.7 (5/6)   [0.0323]
+     via bm25#1, dense#2; trust=authored
+  2. NLP/LLM.md §6.5 (1/6)   [0.0315]
+     via bm25#3, dense#1; trust=authored
+```
+
+Indexing is incremental on content hash, so a second run over an unchanged corpus writes
+nothing. `--rebuild` starts over; `--dry-run` reports the plan and writes nothing.
+
+### How retrieval works
+
+Two retrievers, fused by **reciprocal rank fusion**:
+
+- **BM25** via SQLite FTS5 with porter stemming. Finds the exact term, misses the paraphrase.
+- **Dense** exact cosine over a numpy matrix — no ANN index, because at 10⁴ chunks the recall
+  loss would make every measurement ambiguous between retriever quality and index error
+  ([ADR 0002](docs/adr/0002-exact-search.md)).
+
+RRF rather than a weighted sum of scores: BM25 scores and cosine similarities are not on
+comparable scales, so combining them numerically means inventing a calibration nobody
+measured. RRF reads only rank positions.
+
+Retrieval is single-pass — one query, retrieve, fuse, rank. No query rewriting or multi-hop
+until an evaluation shows them earning their cost ([ADR 0006](docs/adr/0006-plain-before-agentic.md)).
+
+### Honest note on quality
+
+Two findings from running this against a real corpus, both pending proper measurement:
+
+1. **Function words had to be filtered out of candidate selection.** BM25's IDF discounts
+   common terms when scoring, which is not the same as keeping them out of the candidate set.
+   Before the filter, *"what did I conclude about agentic RAG"* returned a management
+   playbook's hiring section first.
+2. **Fusing an uninformative retriever makes results worse.** With the dependency-free
+   `hashing` embedder, lexical-only retrieval ranks the right section third on one query
+   while the fused result does not surface it at all. RRF assumes both inputs carry signal.
+   Hybrid retrieval is a hypothesis to measure, not a default to assume — which is what
+   Phase 4 is for.
 
 ## Development
 
