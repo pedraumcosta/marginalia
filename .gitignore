@@ -26,6 +26,12 @@ index/
 eval/private/
 eval/**/private/
 
+# ---- editors ----
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
 # ---- Python ----
 __pycache__/
 *.py[cod]
