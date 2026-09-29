@@ -21,6 +21,7 @@ rather than guessed at query time.
 from __future__ import annotations
 
 import hashlib
+import os
 from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass
 from fnmatch import fnmatch
@@ -118,26 +119,57 @@ def document_id(rel: str) -> str:
     return hashlib.sha256(rel.encode("utf-8")).hexdigest()[:16]
 
 
-def _relative_to_root(path: Path, roots: Sequence[Path]) -> tuple[str, Path]:
-    """Path relative to the deepest matching root.
+def display_base(roots: Sequence[Path]) -> Path | None:
+    """The directory that relative paths are named against.
 
-    Deepest wins because roots may nest: with both ``AI`` and ``AI/NLP`` declared, a file
-    under the latter should be named relative to it rather than gaining a redundant prefix.
+    With several roots this is their common parent, so a file sitting *at* the top of a
+    root keeps that root's name: four roots each holding a ``README.md`` must not all be
+    called ``README.md``. Naming each file against its own root did exactly that, and
+    since the document id is derived from the relative path, the four collapsed into one
+    and three were silently overwritten.
+
+    Returns None when the roots share no common parent, in which case the caller falls
+    back to prefixing the root's own name.
     """
-    best: tuple[str, Path] | None = None
-    best_len = -1
+    if not roots:
+        return None
+    if len(roots) == 1:
+        return roots[0]
+    try:
+        return Path(os.path.commonpath([str(r) for r in roots]))
+    except ValueError:
+        # Different drives, or an empty set: no shared parent to name against.
+        return None
+
+
+def _relative_to_root(path: Path, roots: Sequence[Path]) -> tuple[str, Path]:
+    """Return (relative path for display and identity, the root that matched).
+
+    The relative path is taken against the roots' common parent rather than against the
+    matching root, so it is unique across roots. The matched root is still reported, since
+    trust rules are evaluated against the path within it.
+    """
+    matched: Path | None = None
+    deepest = -1
     for root in roots:
         try:
-            rel = path.relative_to(root)
+            path.relative_to(root)
         except ValueError:
             continue
-        depth = len(root.parts)
-        if depth > best_len:
-            best_len = depth
-            best = (rel.as_posix(), root)
-    if best is None:
+        if len(root.parts) > deepest:
+            deepest = len(root.parts)
+            matched = root
+    if matched is None:
         return path.name, path.parent
-    return best
+
+    base = display_base(roots)
+    if base is not None:
+        try:
+            return path.relative_to(base).as_posix(), matched
+        except ValueError:
+            pass
+    # No usable common parent: keep the root's name as a discriminator.
+    return f"{matched.name}/{path.relative_to(matched).as_posix()}", matched
 
 
 def load_document(path: Path, roots: Sequence[Path], trust: TrustPolicy) -> Document | None:

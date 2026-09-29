@@ -41,15 +41,16 @@ def test_relative_paths_disambiguate_same_named_files(tree):
     """Bare filenames collapse every README.md into one citation identity."""
     docs = list(discover(policy(tree, "mine", "theirs")))
     rels = sorted(d.rel for d in docs)
-    assert rels == ["Map.md", "README.md", "sub/README.md"]
+    assert rels == ["mine/Map.md", "mine/sub/README.md", "theirs/README.md"]
     assert len({d.doc_id for d in docs}) == 3
 
 
-def test_deepest_matching_root_wins(tree):
-    """Roots may nest; the deeper one names the file, without a redundant prefix."""
+def test_nested_roots_name_against_their_common_parent(tree):
+    """Roots may nest. The deeper root is still reported (trust rules need it), but the
+    name is taken against the shared parent so it stays unique."""
     pol = ScopePolicy(roots=(tree / "mine", tree / "mine" / "sub"))
     doc = next(d for d in discover(pol) if d.path.name == "README.md")
-    assert doc.rel == "README.md"
+    assert doc.rel == "sub/README.md"
     assert doc.root == tree / "mine" / "sub"
 
 
@@ -197,10 +198,11 @@ def test_a_carved_out_clone_inside_a_root_is_downgraded(tmp_path):
 
 
 def test_chunks_cite_the_relative_path(tree):
-    doc = next(d for d in discover(policy(tree, "mine", "theirs")) if d.rel == "sub/README.md")
+    docs = discover(policy(tree, "mine", "theirs"))
+    doc = next(d for d in docs if d.rel == "mine/sub/README.md")
     cs = chunk_of(doc)
     assert cs
-    assert all(c.citation.startswith("sub/README.md") for c in cs)
+    assert all(c.citation.startswith("mine/sub/README.md") for c in cs)
 
 
 def test_chunk_of_respects_size_overrides(tree):
@@ -267,3 +269,70 @@ def test_plan_render_reports_every_category():
     text = plan.render()
     for word in ("added", "changed", "unchanged", "removed"):
         assert word in text
+
+
+# ---- identity collisions (regression) -------------------------------------------
+
+
+def test_files_at_the_top_of_different_roots_do_not_collide(tmp_path):
+    """Regression, found by shipping it.
+
+    Four sibling folders were each given a README.md and declared as scope roots. Naming
+    each file against its own root made all four `README.md`, and since the document id
+    derives from that name, they shared one id: three were silently overwritten and the
+    index held one document where there should have been four.
+    """
+    for name in ("AI", "Coding", "Mngmnt", "TechTrading"):
+        d = tmp_path / name
+        d.mkdir()
+        (d / "README.md").write_text(f"# {name}\n\n" + f"{name} body " * 40)
+
+    pol = ScopePolicy(roots=tuple(tmp_path / n for n in ("AI", "Coding", "Mngmnt", "TechTrading")))
+    docs = list(discover(pol))
+
+    assert len(docs) == 4
+    assert len({d.doc_id for d in docs}) == 4, "ids must be distinct"
+    assert sorted(d.rel for d in docs) == [
+        "AI/README.md",
+        "Coding/README.md",
+        "Mngmnt/README.md",
+        "TechTrading/README.md",
+    ]
+
+
+def test_colliding_names_produce_distinct_citations(tmp_path):
+    """A citation of 'README.md' is useless when four documents share the name."""
+    for name in ("AI", "Coding"):
+        d = tmp_path / name
+        d.mkdir()
+        (d / "README.md").write_text(f"# {name}\n\n## 1. Section\n\n" + f"{name} prose " * 40)
+
+    pol = ScopePolicy(roots=(tmp_path / "AI", tmp_path / "Coding"))
+    citations = {c.citation for d in discover(pol) for c in chunk_of(d)}
+    assert any(c.startswith("AI/README.md") for c in citations)
+    assert any(c.startswith("Coding/README.md") for c in citations)
+
+
+def test_roots_with_no_common_parent_fall_back_to_the_root_name(tmp_path):
+    """Without a shared parent there is nothing to name against, so keep the root name."""
+    a = tmp_path / "alpha" / "one"
+    b = tmp_path / "beta" / "two"
+    for d in (a, b):
+        d.mkdir(parents=True)
+        (d / "README.md").write_text("# R\n\n" + "body " * 40)
+
+    pol = ScopePolicy(roots=(a, b))
+    rels = sorted(d.rel for d in discover(pol))
+    # commonpath here is tmp_path, so names stay unique via the intermediate directories.
+    assert len(set(rels)) == 2
+    assert all(r.endswith("README.md") for r in rels)
+
+
+def test_single_root_keeps_short_relative_names(tmp_path):
+    """One root cannot collide, so names stay as short as they can be."""
+    root = tmp_path / "notes"
+    (root / "deep").mkdir(parents=True)
+    (root / "README.md").write_text("# R\n\n" + "body " * 40)
+    (root / "deep" / "Other.md").write_text("# O\n\n" + "body " * 40)
+    rels = sorted(d.rel for d in discover(ScopePolicy(roots=(root,))))
+    assert rels == ["README.md", "deep/Other.md"]
