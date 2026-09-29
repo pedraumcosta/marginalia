@@ -3,7 +3,7 @@
   "embedder": "hashing:512",
   "k": 5,
   "corpus_chunks": 56,
-  "created_at": "2026-09-28T22:57:39+00:00",
+  "created_at": "2026-09-29T11:22:41+00:00",
   "golden_set": "eval/public/questions.yaml",
   "outcomes": [
     {
@@ -25,6 +25,9 @@
         "cartography/Projections Inventory.md \u00a72"
       ],
       "positions": [
+        1
+      ],
+      "target_positions": [
         1
       ],
       "total_relevant": 1,
@@ -53,6 +56,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Navigation.md \u00a72.2"
@@ -77,6 +83,9 @@
         "cartography/Cartography.md \u00a73.1"
       ],
       "positions": [
+        1
+      ],
+      "target_positions": [
         1
       ],
       "total_relevant": 1,
@@ -105,6 +114,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Navigation.md \u00a73"
@@ -129,6 +141,10 @@
         "lighthouses/Lighthouses.md \u00a75"
       ],
       "positions": [
+        1,
+        2
+      ],
+      "target_positions": [
         1,
         2
       ],
@@ -159,6 +175,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Navigation.md \u00a75.1"
@@ -183,6 +202,10 @@
         "navigation/Navigation.md \u00a75.2"
       ],
       "positions": [
+        1,
+        5
+      ],
+      "target_positions": [
         1,
         5
       ],
@@ -213,6 +236,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "lighthouses/Lighthouses.md \u00a73.2"
@@ -237,6 +263,9 @@
         "README.md"
       ],
       "positions": [
+        2
+      ],
+      "target_positions": [
         2
       ],
       "total_relevant": 1,
@@ -265,6 +294,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "lighthouses/Lighthouses.md \u00a74"
@@ -289,6 +321,9 @@
         "cartography/Cartography.md \u00a74.3"
       ],
       "positions": [
+        1
+      ],
+      "target_positions": [
         1
       ],
       "total_relevant": 1,
@@ -317,6 +352,9 @@
       "positions": [
         3
       ],
+      "target_positions": [
+        3
+      ],
       "total_relevant": 1,
       "targets": [
         "cartography/Cartography.md \u00a72"
@@ -341,6 +379,9 @@
         "cartography/Cartography.md \u00a71"
       ],
       "positions": [
+        1
+      ],
+      "target_positions": [
         1
       ],
       "total_relevant": 1,
@@ -369,6 +410,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "cartography/Projections Inventory.md \u00a74"
@@ -395,6 +439,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "cartography/Cartography.md \u00a73.3"
@@ -419,6 +466,10 @@
         "lighthouses/Lighthouses.md"
       ],
       "positions": [
+        1,
+        2
+      ],
+      "target_positions": [
         1,
         2
       ],
@@ -449,6 +500,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "cartography/Cartography.md \u00a74.1"
@@ -473,6 +527,9 @@
         "navigation/Study Plan.md \u00a71"
       ],
       "positions": [
+        1
+      ],
+      "target_positions": [
         1
       ],
       "total_relevant": 1,
@@ -501,6 +558,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Instruments Inventory.md > Timekeeping"
@@ -525,6 +585,9 @@
         "README.md"
       ],
       "positions": [
+        2
+      ],
+      "target_positions": [
         2
       ],
       "total_relevant": 1,
@@ -553,6 +616,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "lighthouses/Lighthouse Inventory.md > Minor and discontinued"
@@ -579,6 +645,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Study Plan.md \u00a72"
@@ -603,6 +672,7 @@
         "cartography/Cartography.md \u00a74.2"
       ],
       "positions": [],
+      "target_positions": [],
       "total_relevant": 1,
       "targets": [
         "navigation/Study Plan.md \u00a71"
@@ -627,6 +697,9 @@
         "navigation/Field Notes.md"
       ],
       "positions": [
+        5
+      ],
+      "target_positions": [
         5
       ],
       "total_relevant": 1,
@@ -655,6 +728,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Field Notes.md"
@@ -679,6 +755,7 @@
         "cartography/Cartography.md \u00a73.2"
       ],
       "positions": [],
+      "target_positions": [],
       "total_relevant": 1,
       "targets": [
         "navigation/Navigation.md \u00a71"
@@ -703,6 +780,9 @@
         "lighthouses/Lighthouse Inventory.md"
       ],
       "positions": [
+        2
+      ],
+      "target_positions": [
         2
       ],
       "total_relevant": 1,
@@ -731,6 +811,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Navigation.md \u00a72.3"
@@ -757,6 +840,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Navigation.md \u00a73"
@@ -781,6 +867,10 @@
         "lighthouses/Lighthouses.md \u00a73.1"
       ],
       "positions": [
+        1,
+        2
+      ],
+      "target_positions": [
         1,
         2
       ],
@@ -811,6 +901,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Navigation.md \u00a75.1"
@@ -835,6 +928,10 @@
         "cartography/Cartography.md \u00a73.2"
       ],
       "positions": [
+        2,
+        3
+      ],
+      "target_positions": [
         2,
         3
       ],
@@ -865,6 +962,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "lighthouses/Lighthouses.md \u00a73.2"
@@ -889,6 +989,9 @@
         "navigation/Study Plan.md \u00a73"
       ],
       "positions": [
+        1
+      ],
+      "target_positions": [
         1
       ],
       "total_relevant": 1,
@@ -917,6 +1020,9 @@
       "positions": [
         2
       ],
+      "target_positions": [
+        2
+      ],
       "total_relevant": 1,
       "targets": [
         "lighthouses/Lighthouses.md \u00a74"
@@ -941,6 +1047,9 @@
         "navigation/Navigation.md \u00a74.2"
       ],
       "positions": [
+        1
+      ],
+      "target_positions": [
         1
       ],
       "total_relevant": 1,
@@ -969,6 +1078,9 @@
       "positions": [
         3
       ],
+      "target_positions": [
+        3
+      ],
       "total_relevant": 1,
       "targets": [
         "cartography/Cartography.md \u00a72"
@@ -993,6 +1105,9 @@
         "cartography/Cartography.md \u00a75"
       ],
       "positions": [
+        2
+      ],
+      "target_positions": [
         2
       ],
       "total_relevant": 1,
@@ -1021,6 +1136,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "cartography/Projections Inventory.md \u00a74"
@@ -1045,6 +1163,9 @@
         "cartography/Projections Inventory.md \u00a74"
       ],
       "positions": [
+        2
+      ],
+      "target_positions": [
         2
       ],
       "total_relevant": 1,
@@ -1073,6 +1194,9 @@
       "positions": [
         2
       ],
+      "target_positions": [
+        2
+      ],
       "total_relevant": 2,
       "targets": [
         "cartography/Cartography.md \u00a73.2",
@@ -1098,6 +1222,7 @@
         "lighthouses/Lighthouses.md \u00a74"
       ],
       "positions": [],
+      "target_positions": [],
       "total_relevant": 1,
       "targets": [
         "cartography/Cartography.md \u00a74.1"
@@ -1122,6 +1247,9 @@
         "cartography/Cartography.md \u00a74.2"
       ],
       "positions": [
+        3
+      ],
+      "target_positions": [
         3
       ],
       "total_relevant": 1,
@@ -1150,6 +1278,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Instruments Inventory.md > Timekeeping"
@@ -1174,6 +1305,7 @@
         "cartography/Cartography.md \u00a74.2"
       ],
       "positions": [],
+      "target_positions": [],
       "total_relevant": 1,
       "targets": [
         "lighthouses/Lighthouse Inventory.md > Harbour and channel lights"
@@ -1200,6 +1332,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "lighthouses/Lighthouse Inventory.md > Minor and discontinued"
@@ -1224,6 +1359,7 @@
         "navigation/Field Notes.md"
       ],
       "positions": [],
+      "target_positions": [],
       "total_relevant": 1,
       "targets": [
         "navigation/Study Plan.md \u00a72"
@@ -1248,6 +1384,7 @@
         "navigation/Navigation.md \u00a76"
       ],
       "positions": [],
+      "target_positions": [],
       "total_relevant": 1,
       "targets": [
         "navigation/Study Plan.md \u00a71"
@@ -1272,6 +1409,9 @@
         "navigation/Instruments Inventory.md \u00a71"
       ],
       "positions": [
+        2
+      ],
+      "target_positions": [
         2
       ],
       "total_relevant": 1,
@@ -1300,6 +1440,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Field Notes.md"
@@ -1324,6 +1467,9 @@
         "navigation/Study Plan.md \u00a73"
       ],
       "positions": [
+        2
+      ],
+      "target_positions": [
         2
       ],
       "total_relevant": 1,
@@ -1352,6 +1498,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Navigation.md \u00a72.2"
@@ -1376,6 +1525,9 @@
         "lighthouses/Lighthouses.md \u00a74"
       ],
       "positions": [
+        1
+      ],
+      "target_positions": [
         1
       ],
       "total_relevant": 1,
@@ -1404,6 +1556,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Navigation.md \u00a73"
@@ -1428,6 +1583,10 @@
         "lighthouses/Lighthouses.md \u00a74"
       ],
       "positions": [
+        1,
+        2
+      ],
+      "target_positions": [
         1,
         2
       ],
@@ -1458,6 +1617,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Navigation.md \u00a75.1"
@@ -1482,6 +1644,10 @@
         "lighthouses/Lighthouse Inventory.md \u00a74"
       ],
       "positions": [
+        1,
+        2
+      ],
+      "target_positions": [
         1,
         2
       ],
@@ -1512,6 +1678,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "lighthouses/Lighthouses.md \u00a73.2"
@@ -1536,6 +1705,9 @@
         "lighthouses/Lighthouses.md \u00a75"
       ],
       "positions": [
+        1
+      ],
+      "target_positions": [
         1
       ],
       "total_relevant": 1,
@@ -1564,6 +1736,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "lighthouses/Lighthouses.md \u00a74"
@@ -1588,6 +1763,9 @@
         "cartography/Cartography.md \u00a74.3"
       ],
       "positions": [
+        1
+      ],
+      "target_positions": [
         1
       ],
       "total_relevant": 1,
@@ -1616,6 +1794,9 @@
       "positions": [
         4
       ],
+      "target_positions": [
+        4
+      ],
       "total_relevant": 1,
       "targets": [
         "cartography/Cartography.md \u00a72"
@@ -1640,6 +1821,9 @@
         "cartography/Cartography.md \u00a72"
       ],
       "positions": [
+        1
+      ],
+      "target_positions": [
         1
       ],
       "total_relevant": 1,
@@ -1668,6 +1852,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "cartography/Projections Inventory.md \u00a74"
@@ -1694,6 +1881,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "cartography/Cartography.md \u00a73.3"
@@ -1718,6 +1908,10 @@
         "README.md"
       ],
       "positions": [
+        1,
+        4
+      ],
+      "target_positions": [
         1,
         4
       ],
@@ -1748,6 +1942,9 @@
       "positions": [
         3
       ],
+      "target_positions": [
+        3
+      ],
       "total_relevant": 1,
       "targets": [
         "cartography/Cartography.md \u00a74.1"
@@ -1772,6 +1969,9 @@
         "navigation/Study Plan.md \u00a71"
       ],
       "positions": [
+        1
+      ],
+      "target_positions": [
         1
       ],
       "total_relevant": 1,
@@ -1800,6 +2000,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Instruments Inventory.md > Timekeeping"
@@ -1824,6 +2027,7 @@
         "navigation/Navigation.md \u00a74.1"
       ],
       "positions": [],
+      "target_positions": [],
       "total_relevant": 1,
       "targets": [
         "lighthouses/Lighthouse Inventory.md > Harbour and channel lights"
@@ -1850,6 +2054,9 @@
       "positions": [
         1
       ],
+      "target_positions": [
+        1
+      ],
       "total_relevant": 1,
       "targets": [
         "lighthouses/Lighthouse Inventory.md > Minor and discontinued"
@@ -1874,6 +2081,7 @@
         "cartography/Cartography.md \u00a74.1"
       ],
       "positions": [],
+      "target_positions": [],
       "total_relevant": 1,
       "targets": [
         "navigation/Study Plan.md \u00a72"
@@ -1898,6 +2106,7 @@
         "cartography/Cartography.md \u00a74.2"
       ],
       "positions": [],
+      "target_positions": [],
       "total_relevant": 1,
       "targets": [
         "navigation/Study Plan.md \u00a71"
@@ -1924,6 +2133,9 @@
       "positions": [
         2
       ],
+      "target_positions": [
+        2
+      ],
       "total_relevant": 1,
       "targets": [
         "navigation/Field Notes.md"
@@ -1948,6 +2160,9 @@
         "cartography/Cartography.md \u00a74.2"
       ],
       "positions": [
+        1
+      ],
+      "target_positions": [
         1
       ],
       "total_relevant": 1,

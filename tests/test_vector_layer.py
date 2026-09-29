@@ -307,3 +307,20 @@ def test_stats_reports_the_backend_and_size():
     assert st["backend"] == "numpy-exact"
     assert st["count"] == 2 and st["dim"] == 8
     assert int(st["bytes"]) > 0
+
+
+def test_dimension_works_under_either_library_method_name():
+    """sentence-transformers renamed this; the store signature depends on it."""
+
+    class NewApi:
+        def get_embedding_dimension(self):
+            return 384
+
+    class OldApi:
+        def get_sentence_embedding_dimension(self):
+            return 768
+
+    for stub, expected in ((NewApi(), 384), (OldApi(), 768)):
+        emb = SentenceTransformerEmbedder()
+        emb._model = stub  # noqa: SLF001
+        assert emb.dim == expected

@@ -360,12 +360,13 @@ def test_run_eval_on_an_empty_index_raises(tmp_path):
 # ---- aggregation and caching ---------------------------------------------------
 
 
-def outcome(positions, total=1, retriever="lexical") -> QueryOutcome:
+def outcome(positions, total=1, retriever="lexical", target_positions=None) -> QueryOutcome:
     return QueryOutcome(
         question_id="q",
         question="?",
         retriever=retriever,
         positions=list(positions),
+        target_positions=list(target_positions if target_positions is not None else positions),
         total_relevant=total,
     )
 
@@ -433,3 +434,60 @@ def test_render_summary_shows_modes_and_misses():
 
 def test_render_summary_of_an_empty_run():
     assert render_summary(EvalRun(profile="", embedder="", k=5, corpus_chunks=0)) == "no outcomes"
+
+
+# ---- metric bounds (regression) -------------------------------------------------
+
+
+def test_recall_cannot_exceed_one_when_one_target_matches_many_chunks():
+    """Regression: a target names a document section, and a section may be split across
+    several chunks. Counting each matching chunk gave recall 1.583 on the real corpus."""
+    assert recall_at_k([1], total_relevant=1, k=5) == pytest.approx(1.0)
+    assert recall_at_k([1, 2, 3, 4, 5], total_relevant=1, k=5) <= 1.0
+
+
+def test_ndcg_cannot_exceed_one_when_one_target_matches_many_chunks():
+    """Regression: ndcg reached 1.139 for the same reason."""
+    assert ndcg_at_k([1, 2, 3, 4, 5], total_relevant=1, k=5) <= 1.0
+
+
+@pytest.mark.parametrize("total", [1, 2, 3, 5])
+@pytest.mark.parametrize("positions", [[1], [1, 2], [1, 2, 3, 4, 5], [2, 4], [5]])
+def test_recall_and_ndcg_are_always_in_range(positions, total):
+    r = recall_at_k(positions, total_relevant=total, k=5)
+    n = ndcg_at_k(positions, total_relevant=total, k=5)
+    assert 0.0 <= r <= 1.0, f"recall {r} out of range"
+    assert 0.0 <= n <= 1.0, f"ndcg {n} out of range"
+
+
+def test_aggregate_metrics_are_all_in_range():
+    outcomes = [
+        outcome([1, 2, 3, 4, 5], total=1, target_positions=[1]),
+        outcome([2], total=2, target_positions=[2]),
+        outcome([], total=3, target_positions=[]),
+    ]
+    agg = aggregate(outcomes, k=5)
+    for name, value in agg.items():
+        assert 0.0 <= value <= 1.0, f"{name} = {value} out of range"
+
+
+def test_target_positions_record_the_first_rank_per_target(harness):
+    """One entry per distinct target, at the rank it first appeared."""
+    retriever, index = harness
+    q = Question(
+        id="both",
+        question="longitude meridian Mercator angle",
+        targets=(
+            Target(doc="nav/Navigation.md", section="1"),
+            Target(doc="charts/Cartography.md", section="2"),
+        ),
+    )
+    out = evaluate_question(retriever, index, q, mode="lexical", k=10)
+    assert len(out.target_positions) <= out.total_relevant
+    assert out.target_positions == sorted(out.target_positions)
+    assert recall_at_k(out.target_positions, out.total_relevant, 10) <= 1.0
+
+
+def test_precision_still_counts_retrieved_chunks_not_targets():
+    """Precision is about what was returned, so every matching chunk counts there."""
+    assert precision_at_k([1, 2, 3], k=10) == pytest.approx(0.3)

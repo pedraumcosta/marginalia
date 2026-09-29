@@ -126,7 +126,13 @@ class SentenceTransformerEmbedder:
 
     @property
     def dim(self) -> int:
-        return int(self._load().get_sentence_embedding_dimension())
+        model = self._load()
+        # sentence-transformers renamed this; support both so the dimension -- which the
+        # store's signature depends on -- does not start raising on a library upgrade.
+        getter = getattr(model, "get_embedding_dimension", None)
+        if getter is None:
+            getter = model.get_sentence_embedding_dimension
+        return int(getter())
 
     @property
     def signature(self) -> str:

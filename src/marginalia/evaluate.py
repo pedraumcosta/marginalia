@@ -148,11 +148,18 @@ def hit_rate(positions: Sequence[int], k: int) -> float:
     return 1.0 if any(p <= k for p in positions) else 0.0
 
 
-def recall_at_k(positions: Sequence[int], total_relevant: int, k: int) -> float:
-    """Fraction of the relevant passages that made the top k."""
+def recall_at_k(target_positions: Sequence[int], total_relevant: int, k: int) -> float:
+    """Fraction of the distinct relevant *targets* that made the top k.
+
+    Takes one position per target -- the rank where that target was first found -- not
+    every matching chunk. A target names a document section, a section may be split
+    across several chunks, and counting each matching chunk made this exceed 1.0 on a
+    corpus with split sections (observed at 1.583 before the fix).
+    """
     if total_relevant <= 0:
         return 0.0
-    return sum(1 for p in positions if p <= k) / total_relevant
+    found = sum(1 for p in target_positions if p <= k)
+    return min(found, total_relevant) / total_relevant
 
 
 def precision_at_k(positions: Sequence[int], k: int) -> float:
@@ -161,16 +168,18 @@ def precision_at_k(positions: Sequence[int], k: int) -> float:
     return sum(1 for p in positions if p <= k) / k
 
 
-def ndcg_at_k(positions: Sequence[int], total_relevant: int, k: int) -> float:
-    """Binary-relevance NDCG.
+def ndcg_at_k(target_positions: Sequence[int], total_relevant: int, k: int) -> float:
+    """Binary-relevance NDCG over distinct targets.
 
-    Gain 1 per relevant result discounted by log2(rank + 1); the ideal ranking puts every
-    relevant passage in the first positions, so the denominator depends on how many
-    relevant passages exist, capped at k.
+    Gain 1 per target found, discounted by log2(rank + 1) at the rank where it was first
+    retrieved. Like recall, this counts targets rather than matching chunks: summing a gain
+    per chunk let a split section earn several gains for one target and pushed the result
+    above 1.0 (observed at 1.139 before the fix).
     """
     if total_relevant <= 0 or k <= 0:
         return 0.0
-    dcg = sum(1.0 / math.log2(p + 1) for p in positions if p <= k)
+    ranks = sorted(p for p in target_positions if p <= k)[:total_relevant]
+    dcg = sum(1.0 / math.log2(p + 1) for p in ranks)
     ideal = sum(1.0 / math.log2(i + 2) for i in range(min(total_relevant, k)))
     return dcg / ideal if ideal else 0.0
 
@@ -190,6 +199,10 @@ class QueryOutcome:
     ranked: list[str] = field(default_factory=list)
     citations: list[str] = field(default_factory=list)
     positions: list[int] = field(default_factory=list)
+    # One entry per distinct target that was found, at the rank where it first appeared.
+    # Kept separate from `positions` (every matching chunk) because recall and NDCG are
+    # about targets while precision and MRR are about retrieved results.
+    target_positions: list[int] = field(default_factory=list)
     total_relevant: int = 0
     targets: list[str] = field(default_factory=list)
 
@@ -209,6 +222,7 @@ class QueryOutcome:
             "ranked": self.ranked,
             "citations": self.citations,
             "positions": self.positions,
+            "target_positions": self.target_positions,
             "total_relevant": self.total_relevant,
             "targets": self.targets,
         }
@@ -222,6 +236,7 @@ class QueryOutcome:
             ranked=[str(x) for x in (data.get("ranked") or [])],
             citations=[str(x) for x in (data.get("citations") or [])],
             positions=[int(x) for x in (data.get("positions") or [])],
+            target_positions=[int(x) for x in (data.get("target_positions") or [])],
             total_relevant=int(data.get("total_relevant") or 0),
             targets=[str(x) for x in (data.get("targets") or [])],
         )
@@ -234,10 +249,11 @@ def aggregate(outcomes: Sequence[QueryOutcome], k: int = DEFAULT_K) -> dict[str,
     n = len(outcomes)
     return {
         f"hit@{k}": sum(hit_rate(o.positions, k) for o in outcomes) / n,
-        f"recall@{k}": sum(recall_at_k(o.positions, o.total_relevant, k) for o in outcomes) / n,
+        f"recall@{k}": sum(recall_at_k(o.target_positions, o.total_relevant, k) for o in outcomes)
+        / n,
         f"precision@{k}": sum(precision_at_k(o.positions, k) for o in outcomes) / n,
         "mrr": sum(reciprocal_rank(o.positions) for o in outcomes) / n,
-        f"ndcg@{k}": sum(ndcg_at_k(o.positions, o.total_relevant, k) for o in outcomes) / n,
+        f"ndcg@{k}": sum(ndcg_at_k(o.target_positions, o.total_relevant, k) for o in outcomes) / n,
     }
 
 
@@ -264,13 +280,17 @@ def evaluate_question(
     rows = index.chunks_by_id(ranked)
     citations: list[str] = []
     positions: list[int] = []
+    first_seen: dict[str, int] = {}
     for rank, cid in enumerate(ranked, start=1):
         row = rows.get(cid)
         if row is None:
             continue
         citations.append(str(row["citation"]))
-        if any(t.matches(row) for t in question.targets):
+        matched = [t for t in question.targets if t.matches(row)]
+        if matched:
             positions.append(rank)
+            for t in matched:
+                first_seen.setdefault(t.label(), rank)
 
     return QueryOutcome(
         question_id=question.id,
@@ -279,6 +299,7 @@ def evaluate_question(
         ranked=ranked,
         citations=citations,
         positions=positions,
+        target_positions=sorted(first_seen.values()),
         total_relevant=len(question.targets),
         targets=[t.label() for t in question.targets],
     )
