@@ -43,10 +43,10 @@ library
 
 $ marginalia scope
 Effective scope:
-       8  …/Practices/AI
-       6  …/Practices/Coding
-      19  …/Practices/Mngmnt
-       2  …/Practices/TechTrading
+       8  ~/wiki/ai
+       6  ~/wiki/engineering
+      19  ~/wiki/management
+       2  ~/wiki/trading
   ------
       35  files, 0.8 MiB
   index:  ~/.local/share/marginalia/authored
@@ -208,36 +208,86 @@ Relevance is judged on document plus section, not on the citation string — cit
 part suffix for split sections, and pinning ground truth to `(2/6)` would break the golden
 set every time chunk sizing changed.
 
-### Hybrid retrieval helps — but only when the dense side carries signal
+### What actually wins depends on two things, and neither is the design
 
-Running the same 25 questions under two embedders answers the question that a single
-column cannot. **The embedder decides whether fusion is worth anything at all.**
+The same 25 questions, run under two embedders. Then the same harness against a second,
+private corpus of roughly a thousand chunks — a hand-maintained reference wiki, dense with
+proper nouns, identifiers and cross-references.
 
-| embedder | lexical ndcg@5 | dense ndcg@5 | fused ndcg@5 | verdict |
-|---|---|---|---|---|
-| `hashing` (lexical by construction) | 0.880 | 0.649 | **0.803** | fusion **hurts** |
-| `all-MiniLM-L6-v2` | 0.880 | 0.888 | **0.938** | fusion **helps** |
+| corpus | embedder | lexical | dense | fused | winner |
+|---|---|---|---|---|---|
+| synthetic, 56 chunks | `hashing` | 0.880 | 0.649 | 0.803 | **lexical** |
+| synthetic, 56 chunks | MiniLM | 0.880 | 0.888 | 0.938 | **fused** |
+| private, ~1000 chunks | MiniLM | 0.796 | 0.582 | 0.733 | **lexical** |
 
-With a real embedding model, fusion beats both retrievers it is built from — and at k=3 it
-reaches `hit@3 = 1.000` where each retriever alone manages 0.920. The reason is visible in
-the per-question misses: **lexical and dense fail on different questions.** BM25 misses
-*"What should I read first and why?"*; dense misses *"Which facts are recorded as
-unresolved?"*. Fusion covers both, which is the complementarity hybrid retrieval is supposed
-to deliver, now measured rather than assumed.
+*ndcg@5. The private row is not reproducible from this repository — the corpus is not
+public — and is reported as measured, per [ADR 0008](docs/adr/0008-eval-split.md).*
 
-With the dependency-free `hashing` embedder the same fusion **costs** accuracy, because RRF
-assumes both inputs carry signal and that one does not.
+**Two conditions decide it.**
 
-So the honest claim is neither "hybrid always wins" nor "hybrid is overrated". It is
-conditional, and the condition is measurable: fuse a retriever only once you can show it
-beats noise on its own. Per [ADR 0008](docs/adr/0008-eval-split.md) every number names its
-embedder, and the CI gate floors the *best* retriever rather than a named one, because which
-mode wins is a property of the configuration rather than a fact about the design.
+*The embedder has to carry signal.* Swap MiniLM for the dependency-free `hashing` embedder
+and fusion goes from beating both its inputs to losing to one of them. RRF assumes each
+ranking it fuses is informative; fusing noise costs real accuracy.
 
-One earlier fix, also measured: **function words had to be filtered out of candidate
-selection**. BM25's IDF discounts common terms when scoring, which is not the same as keeping
-them out of the candidate set. Before the filter, *"what did I conclude about agentic RAG"*
-returned a management playbook's hiring section first.
+*The corpus has to suit the retriever.* With the same good embedder, fusion wins on synthetic
+prose and loses on a reference corpus. BM25 is at home among exact identifiers, section
+numbers and proper nouns; a general-purpose sentence model is not, and fusing a weaker
+retriever drags the ranking down again.
+
+Where fusion does win, the reason is visible in the misses: **lexical and dense fail on
+different questions.** BM25 misses *"What should I read first and why?"*; dense misses
+*"Which facts are recorded as unresolved?"*. That complementarity is the whole premise of
+hybrid retrieval, and it is the thing to check rather than assume.
+
+So there is no headline number here, and that is the finding. Measure on your corpus with
+your embedder; the CI gate floors the *best* retriever rather than a named one for exactly
+this reason.
+
+### A negative result: folder-level prose did not help
+
+The private corpus is organised in four top-level practice folders. Each was given a README
+— what the folder is, what questions it answers, which documents to start from, and what is
+deliberately elsewhere — on the theory that folder-level orientation would improve retrieval.
+
+Measured properly: READMEs removed, full rebuild, measured, restored, re-indexed, measured
+again, nothing else changed.
+
+| retriever | Δ hit@5 | Δ recall@5 | Δ precision@5 | Δ mrr | Δ ndcg@5 |
+|---|---|---|---|---|---|
+| lexical | +0.000 | +0.000 | +0.000 | +0.000 | +0.000 |
+| dense | +0.000 | +0.000 | +0.000 | +0.000 | +0.000 |
+| fused | +0.000 | +0.000 | **−0.017** | +0.000 | +0.000 |
+
+Nothing. The prediction recorded beforehand — that semantic retrieval would gain most — was
+simply wrong, and fused precision fell slightly because the new pages take result slots
+without being relevant to those questions.
+
+The limitation matters as much as the result: those questions ask about **content inside**
+documents, while the READMEs answer **routing** questions, which the set barely contains. A
+separate routing set, written afterwards and therefore weaker evidence, finds the READMEs
+retrievable for that purpose (`hit@5` 1.000). So the narrow conclusion is that folder prose
+does not improve content retrieval and is retrievable for navigation — not that it is
+worthless, and not that it helped.
+
+The first run of this experiment was **invalid**, and finding out why was worth more than the
+experiment. Three of the four READMEs were missing from the index: each sat at the top of its
+own scope root, every root-relative path came out as `README.md`, and since document identity
+derives from that path, three were silently overwritten. The index reported "4 added" while
+holding one. Checking whether the new documents were retrieved *at all* is what surfaced it.
+
+## Limitations
+
+- **Two corpora.** Every finding above is conditioned on a synthetic corpus of 56 chunks and
+  one private corpus of about a thousand. Neither is large, and two is not many.
+- **The public golden set is 25 questions**, written by the same person who wrote the corpus.
+  It measures whether retrieval finds known passages, not whether answers are good.
+- **No local generative model.** The default answer is extractive.
+- **Answer quality is unmeasured.** Faithfulness and answer relevance are named in
+  [ADR 0008](docs/adr/0008-eval-split.md) and not yet implemented; only retrieval is measured.
+- **The injection defences are mitigations, not guarantees.** They make a poisoned passage
+  visible and keep its blast radius inside one answer. They do not make injection impossible.
+- **Latency is unmeasured.** Exact search is linear in corpus size and fine at this scale;
+  nobody has timed it.
 
 ## Development
 
